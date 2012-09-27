@@ -1,18 +1,29 @@
 @Ajaxify =
 
+  # options
+  #
+  active: true
   content_container: 'main'
-  on_before_load: null
-  on_success: null
-  on_success_once: null
-  hash_changed: null
-  ignore_hash_change: null
-  load_page_from_hash: null
   handle_extra_content: null
   base_path_regexp: null
 
+  # callbacks
+  #
+  on_before_load: null
+  on_success: null
+  on_success_once: null
+
+  # flash
+  #
   flash_types: ['notice']
   flash_effect: null
   clear_flash_effect: null
+
+  # internal use only
+  #
+  hash_changed: null
+  ignore_hash_change: null
+  load_page_from_hash: null
 
   initial_history_state:
     url: window.location.href
@@ -22,39 +33,41 @@
 
   init: ->
 
-    if this.load_page_from_hash
-      this.load_page_from_hash = false
-      this.on_hash_change()
+    if this.active
 
-    self = this
+      if this.load_page_from_hash
+        this.load_page_from_hash = false
+        this.on_hash_change()
 
-    protocol_and_hostname = "#{window.location.protocol}//#{window.location.hostname}"
+      self = this
 
-    $('body').on 'click', "a[href^='/']:not(.no_ajaxify), a[href^='#{protocol_and_hostname}']:not(.no_ajaxify)", ->
+      protocol_and_hostname = "#{window.location.protocol}//#{window.location.hostname}"
 
-      $this = $(this)
-      self.load
-        url: $this.attr('href')
-        type: $this.data('method')
-        confirm: $this.data('confirm')
+      $('body').on 'click', "a[href^='/']:not(.no_ajaxify), a[href^='#{protocol_and_hostname}']:not(.no_ajaxify)", ->
 
-      false
+        $this = $(this)
+        self.load
+          url: $this.attr('href')
+          type: $this.data('method')
+          confirm: $this.data('confirm')
 
-    exclude_selector = ":not(.no_ajaxify):not([enctype='multipart/form-data'])"
-    $('body').on 'submit', "form[action^='/']#{exclude_selector},
-                            form[action^='#{protocol_and_hostname}']#{exclude_selector}", ->
+        false
 
-      $this = $(this)
-      form_params = $(this).serialize()
-      form_params += '&ajaxified=true'
+      exclude_selector = ":not(.no_ajaxify):not([enctype='multipart/form-data'])"
+      $('body').on 'submit', "form[action^='/']#{exclude_selector},
+                              form[action^='#{protocol_and_hostname}']#{exclude_selector}", ->
 
-      self.load
-        url: $this.attr('action')
-        data: form_params
-        type: $this.attr('method')
-        confirm: $this.data('confirm')
+        $this = $(this)
+        form_params = $(this).serialize()
+        form_params += '&ajaxified=true'
 
-      false
+        self.load
+          url: $this.attr('action')
+          data: form_params
+          type: $this.attr('method')
+          confirm: $this.data('confirm')
+
+        false
 
 
     window.onpopstate = (e) ->
@@ -155,7 +168,7 @@
 
     $("##{this.content_container} #ajaxify_content").remove()
 
-    if title != ''
+    if title
       document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
 
     this.show_flash()

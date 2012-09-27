@@ -29,8 +29,12 @@ module AjaxifyRails
             layout = args[:layout] || current_layout
             layout = (layout == 'application' or layout == true) ? false : layout
             args[:layout] = layout
-            cookies[:flash_notice] = flash[:notice]   # make customizable
-            flash[:notice] = nil
+
+            flash.keys.each do |key|
+              cookies["flash_#{key}"] = flash[key]
+              flash[key] = nil
+            end
+
             extra_content = (respond_to?(:ajaxify_extra_content) ? ajaxify_extra_content : '')
             super args
 
@@ -39,8 +43,10 @@ module AjaxifyRails
             #
             current_url_tag = view_context.content_tag(:span, request.fullpath.sub(/\?ajaxified=true&(.*)/, '?\1').sub(/(&|\?)ajaxified=true/, ''),
                                                        id: 'ajaxify_location')
+
             response_body[0] += view_context.content_tag(:div, current_url_tag + extra_content,
-                                                         id: 'ajaxify_content', style: 'display:none', data: { page_title: try(:page_title) })
+                                                         id: 'ajaxify_content', style: 'display:none',
+                                                         data: { page_title: respond_to?(:page_title) ? page_title : nil })
             response.body = self.response_body[0]
             return
           end
