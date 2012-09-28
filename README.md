@@ -5,7 +5,7 @@ No more full page reloads for your Rails app! Yay!
 Automatically makes your app loading content in the background via ajax.
 
 Works by turning all internal links into ajax links that trigger an update of the page's content area. 
-Also form submission are automatically turned into ajax requests.
+Also form submissions are automatically turned into ajax requests.
 
 Features: 
 

@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Nico Ritsche"]
   gem.email         = ["ncrdevmail@gmail.com"]
   gem.description   = %q{Automatically makes your Rails app loading content in the background via ajax. Works by turning all internal links into
-                         ajax links that trigger an update of the page's content area. Also form submission are automatically turned into ajax requests.
+                         ajax links that trigger an update of the page's content area. Also form submissions are automatically turned into ajax requests.
                          Uses the html5 history interface for changing the url and making the browser's back and forward buttons working with ajax.
                          Falls back to a hash based approach for browsers without the history interface (like Internet Explorer).
                          Transparently handles redirects and supports flash messages and page titles. Requires Ruby 1.9 and the asset pipeline.}
