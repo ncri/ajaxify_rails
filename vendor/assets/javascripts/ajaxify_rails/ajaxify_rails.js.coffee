@@ -81,7 +81,6 @@
 
 
     window.onhashchange = ->
-      self.hash_changed = true
       if window.location.hash.indexOf('#/') == 0  # only react to hash changes if hash starts with '/'
         unless self.ignore_hash_change
           self.on_hash_change()
@@ -93,9 +92,9 @@
     url = window.location.hash.replace(/#/, "")
     if url == ''
       url = '/'
+    this.hash_changed = true
     this.load
       url: url
-    self.hash_changed = false
 
 
   load: (options, pop_state = false) ->
@@ -165,7 +164,11 @@
       options.url = current_url.replace(/(&|\?)ajaxify_redirect=true/,'')
       options.type = 'GET'
 
-    this.update_url options, pop_state
+    if not this.hash_changed  # no need to update url if the ajax call resulted in a hash change
+      this.update_url options, pop_state
+    else
+      this.hash_changed = false
+
 
     if this.handle_extra_content
       this.handle_extra_content()
@@ -212,7 +215,7 @@
           hash = hash.replace(base_path_regexp, '')
           hash = "/#{hash}" unless hash == '' or hash.indexOf('/') == 0
         window.location.hash = hash
-        this.ignore_hash_change = false
+#        this.ignore_hash_change = false
 
 
   base_path_regexp: ->
