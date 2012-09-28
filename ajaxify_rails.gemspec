@@ -4,11 +4,12 @@ require File.expand_path('../lib/ajaxify_rails/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Nico Ritsche"]
   gem.email         = ["ncrdevmail@gmail.com"]
-  gem.description   = %q{Rails gem for automatically turning internal links into ajax links that load content without a full page reload.
+  gem.description   = %q{Automatically makes your Rails app loading content in the background via ajax. Works by turning all internal links into
+                         ajax links that trigger an update of the page's content area. Also form submission are automatically turned into ajax requests.
                          Uses the html5 history interface for changing the url and making the browser's back and forward buttons working with ajax.
                          Falls back to a hash based approach for browsers without the history interface (like Internet Explorer).
                          Transparently handles redirects and supports flash messages and page titles. Requires Ruby 1.9 and the asset pipeline.}
-  gem.summary       = %q{Rails gem for automatically turning internal links into ajax links that load content without a full page reload.}
+  gem.summary       = %q{Rails gem for automatically turning internal links/forms into ajax links/forms that load content without a full page reload.}
   gem.homepage      = "https://github.com/ncri/ajaxify_rails"
 
   gem.files         = `git ls-files`.split($\)
