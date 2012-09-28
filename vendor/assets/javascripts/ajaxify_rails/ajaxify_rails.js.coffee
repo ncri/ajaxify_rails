@@ -22,7 +22,6 @@
 
   # internal use only
   #
-  hash_changed: null
   ignore_hash_change: null
   load_page_from_hash: null
 
@@ -95,6 +94,7 @@
     this.hash_changed = true
     this.load
       url: url
+    , true
 
 
   load: (options, pop_state = false) ->
@@ -164,11 +164,7 @@
       options.url = current_url.replace(/(&|\?)ajaxify_redirect=true/,'')
       options.type = 'GET'
 
-    if not this.hash_changed  # no need to update url if the ajax call resulted in a hash change
-      this.update_url options, pop_state
-    else
-      this.hash_changed = false
-
+    this.update_url options, pop_state
 
     if this.handle_extra_content
       this.handle_extra_content()
