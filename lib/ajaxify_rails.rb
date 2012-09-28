@@ -2,6 +2,8 @@ require "ajaxify_rails/version"
 
 module AjaxifyRails
 
+  BASE_PATHS = []
+
   module Rails
     class Engine < ::Rails::Engine
     end
@@ -36,6 +38,7 @@ module AjaxifyRails
             end
 
             extra_content = (respond_to?(:ajaxify_extra_content) ? ajaxify_extra_content : '')
+
             super args
 
             # Store current path for redirect url changes. Also used to remove the ajaxify parameter that gets added to some auto generated urls

@@ -5,13 +5,14 @@
   active: true
   content_container: 'main'
   handle_extra_content: null
-  base_path_regexp: null
+  base_paths: <%= AjaxifyRails::BASE_PATHS.any? ? "[#{ AjaxifyRails::BASE_PATHS.map{ |p| "'#{p}'" }.join(',') }]" : 'null' %>
 
   # callbacks
   #
   on_before_load: null
   on_success: null
   on_success_once: null
+  on_before_correct_url: null
 
   # flash
   #
@@ -55,14 +56,17 @@
 
       exclude_selector = ":not(.no_ajaxify):not([enctype='multipart/form-data'])"
       $('body').on 'submit', "form[action^='/']#{exclude_selector},
-                              form[action^='#{protocol_and_hostname}']#{exclude_selector}", ->
+                              form[action^='#{protocol_and_hostname}']#{exclude_selector},
+                              form[action='']#{exclude_selector}", ->
 
         $this = $(this)
         form_params = $(this).serialize()
         form_params += '&ajaxified=true'
 
+        action = $this.attr('action')
+
         self.load
-          url: $this.attr('action')
+          url: if action != '' then action else '/'
           data: form_params
           type: $this.attr('method')
           confirm: $this.data('confirm')
@@ -203,10 +207,27 @@
       else
         this.ignore_hash_change = true  # avoids loading the page for hash changes caused by link clicks
         hash = "#{options.url.replace(new RegExp(this.protocol_with_host()), '')}"
-        if this.base_path_regexp
-          hash = hash.replace(this.base_path_regexp, '')
+        base_path_regexp = this.base_path_regexp()
+        if base_path_regexp
+          hash = hash.replace(base_path_regexp, '')
+          hash = "/#{hash}" unless hash == '' or hash.indexOf('/') == 0
         window.location.hash = hash
+        this.ignore_hash_change = false
 
+
+  base_path_regexp: ->
+    return null unless this.base_paths
+    # match starting and ending with base path, e.g. "^\/en$" (i.e. we are at the base path root) or
+    # starting with base path and continuing with '/', e.g. "^\/en\/" (i.e. we are NOT at the base path root)
+    self = this
+    new RegExp("^\/(#{ $.map(this.base_paths, (el) ->
+      el = self.regexp_escape el
+      "#{el}$|#{el}\/|#{el}\\?"
+    ).join('|')})", 'i')
+
+
+  regexp_escape: (str) ->
+    str.replace new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&'
 
 
   protocol_with_host: ->
@@ -215,28 +236,37 @@
 
 
   correct_url: ->
-    if window.location.hash.indexOf('#/') == 0
-      if !window.history.pushState
-        Ajaxify.load_page_from_hash = true   # notify Ajaxify that a hash will be loaded and ignore all other calls to load until hash url is loaded
-      else
-        path = window.location.pathname + window.location.hash.replace(/#\//, "")       # load proper url in case url contains #/ and browser supports history api
-        window.location.href = "#{this.protocol_with_host()}#{path}"
+    if this.active
+      if window.location.hash.indexOf('#/') == 0
+        if !window.history.pushState
+          Ajaxify.load_page_from_hash = true   # notify Ajaxify that a hash will be loaded and ignore all other calls to load until hash url is loaded
+        else
+          path = window.location.pathname + window.location.hash.replace(/#\//, "")       # load proper url in case url contains #/ and browser supports history api
+          window.location.href = "#{this.protocol_with_host()}#{path}"
 
-    else if !window.history.pushState and window.location.pathname != '/'
-      if this.base_path_regexp and (match = window.location.pathname.match(this.base_path_regexp))
-        path = "#{match[0]}/##{window.location.pathname}"
-        if match[0] == window.location.pathname then return
-      else
-        path = "/##{window.location.pathname}"
+      else if !window.history.pushState
+        # move path behind # for browsers without history api
+        if window.location.pathname != '/'
+          base_path_regexp = this.base_path_regexp()
+          if base_path_regexp and (match = window.location.pathname.match(base_path_regexp))
+            if match[0] == window.location.pathname
+              if window.location.search == ''
+                return
+              else
+                path = match[0].replace(/\?/,'') + '#'
+            else
+              path = "#{match[0]}##{window.location.pathname}"
+          else
+            path = "/##{window.location.pathname}"
 
-      window.location.href = "#{this.protocol_with_host()}#{path}#{window.location.search}"  # move path behind # for browsers without history api if not at site root
-
+          window.location.href = "#{this.protocol_with_host()}#{path}#{window.location.search}"
+        else
+          if window.location.search != ''
+            window.location.href = "#{this.protocol_with_host()}/##{window.location.search}" # move search behind #
 
   is_string: (variable) ->
     Object.prototype.toString.call(variable) == '[object String]'
 
-
-Ajaxify.correct_url()
 
 jQuery ->
   Ajaxify.init()
