@@ -5,7 +5,7 @@
   active: true
   content_container: 'main'
   handle_extra_content: null
-  base_paths: <%= AjaxifyRails::BASE_PATHS.any? ? "[#{ AjaxifyRails::BASE_PATHS.map{ |p| "'#{p}'" }.join(',') }]" : 'null' %>
+  base_paths: null
 
   # callbacks
   #
@@ -32,7 +32,7 @@
       ajaxified: true
 
 
-  init: ->
+  ajaxify: ->
 
     if this.active
 
@@ -264,9 +264,12 @@
           if window.location.search != ''
             window.location.href = "#{this.protocol_with_host()}/##{window.location.search}" # move search behind #
 
+  init: ->
+    this.correct_url()
+
   is_string: (variable) ->
     Object.prototype.toString.call(variable) == '[object String]'
 
 
 jQuery ->
-  Ajaxify.init()
+  Ajaxify.ajaxify()

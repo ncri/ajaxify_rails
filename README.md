@@ -36,6 +36,14 @@ In your application.js file add:
 
 ## Usage
 
+Call `Ajaxify.init()` in your layout's javascript.
+Do this as early as possible to ensure Ajaxify's interchangeable url schemes (history api vs. hash based urls)
+work most effectively. 
+
+The later you call `init()`, the later potential redirects from one scheme to another are performed,
+which means the more unnecessary work the browser has to do.
+
+
 ### Content Area
 
 Ajaxify assumes that your app has a content container html tag with the id `main`.
@@ -104,12 +112,15 @@ Sometimes you need to redirect on the root url.
 For example you might have a localized application with the locale inside the url.
 When a user navigates to `your_domain.com` he/she gets redirected to e.g. `your_domain.com/en/`. This works fine in browsers supporting
 the html 5 history api. However, for browsers without the history api like Internet Explorer before version 10, Ajaxify needs hints
-about your url structure to not get confused (it creates endless redirects otherwise!). You need to explicitly supply some regex.
+about your url structure to not get confused (it creates endless redirects otherwise!). You need to explicitly supply all possible root
+paths.
 
 Example: if your app's root url potentially redirects to `your_domain.com/en/` and `your_domain.com/de/`
 you need to hint Ajaxyfiy like this:
 
-    Ajaxify.base_path_regexp = /^(\/en|\/de)/i
+    Ajaxify.base_paths = ['de', 'en']
+
+Important: `Ajaxify.base_paths` need to be set before `Ajaxify.init()` is called!
 
 
 ### Extra Content
@@ -143,7 +154,7 @@ Here is a reference of all options and callbacks you can set on the client side 
 
     active                 true         Toggles link ajaxification.
     content_container     'main'        Id of the container to insert the main content into ("yield wrapper").
-    base_path_regexp       null         Regex hint for applications with root url redirects.
+    base_paths             null         Base path segments for applications with root url redirects.
 
     on_before_load         null         Callback: Called before the ajaxify request is started.
     on_success             null         Callback: Called when an ajaxify requests finished successfully.

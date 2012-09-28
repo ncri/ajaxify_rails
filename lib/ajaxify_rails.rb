@@ -2,8 +2,6 @@ require "ajaxify_rails/version"
 
 module AjaxifyRails
 
-  BASE_PATHS = []
-
   module Rails
     class Engine < ::Rails::Engine
     end
