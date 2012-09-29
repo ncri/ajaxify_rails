@@ -13,12 +13,16 @@ Features:
 - Falls back to a hash based approach for browsers without the history interface (like Internet Explorer version <10)
 - Hash based and non-hash URLs are interchangeable.
 - Transparently handles redirects and supports page titles and flash messages.
-- Requires Ruby 1.9 and the asset pipeline.
 - Tested with Chrome, Firefox, Safari and Internet Explorer 8+
 
 Demo: http://ajaxify-demo.herokuapp.com/
 
 Inspired by the pjax_rails gem (https://github.com/rails/pjax_rails)
+
+## Requirements
+
+- Ruby 1.9 and the asset pipeline.
+- Your app doesn't use named anchors (#). Named anchors can't be correctly represented in the fallback hash based url scheme.
 
 ## Installation
 

@@ -73,24 +73,30 @@
         false
 
 
+    # (history interface browsers only)
     window.onpopstate = (e) ->
       if e.state
         e.state.cache = false
         self.load e.state, true
 
 
+    # (non history interface browsers only)
     window.onhashchange = ->
-      if window.location.hash.indexOf('#/') == 0  # only react to hash changes if hash starts with '/'
-        unless self.ignore_hash_change
-          self.on_hash_change()
-        else
-          self.ignore_hash_change = false
+      unless self.ignore_hash_change
+        self.on_hash_change()
+      else
+        self.ignore_hash_change = false
 
 
+  # load content from url hash (non history interface browsers)
   on_hash_change: ->
     url = window.location.hash.replace(/#/, "")
-    if url == ''
-      url = '/'
+
+    base_path_regexp = this.base_path_regexp()
+    if match = window.location.pathname.match(base_path_regexp)
+      url = match[0] + url
+
+    url = '/' if url == ''
     this.hash_changed = true
     this.load
       url: url
@@ -204,20 +210,22 @@
         ,'', options.url
 
       else
-        this.ignore_hash_change = true  # avoids loading the page for hash changes caused by link clicks
+        this.ignore_hash_change = true  # for non histroy interface browsers: avoids loading the page for hash changes caused by link clicks
         hash = "#{options.url.replace(new RegExp(this.protocol_with_host()), '')}"
+
         base_path_regexp = this.base_path_regexp()
         if base_path_regexp
           hash = hash.replace(base_path_regexp, '')
           hash = "/#{hash}" unless hash == '' or hash.indexOf('/') == 0
+
         window.location.hash = hash
-#        this.ignore_hash_change = false
 
 
   base_path_regexp: ->
     return null unless this.base_paths
     # match starting and ending with base path, e.g. "^\/en$" (i.e. we are at the base path root) or
-    # starting with base path and continuing with '/', e.g. "^\/en\/" (i.e. we are NOT at the base path root)
+    # starting with base path and continuing with '/', e.g. "^\/en\/" (i.e. we are NOT at the base path root) or
+    # starting with base path and continuing with '?', e.g. "^\/en\?" (i.e. we are at the base path root and have query params)
     self = this
     new RegExp("^\/(#{ $.map(this.base_paths, (el) ->
       el = self.regexp_escape el
@@ -225,49 +233,58 @@
     ).join('|')})", 'i')
 
 
-  regexp_escape: (str) ->
-    str.replace new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&'
-
-
-  protocol_with_host: ->
-    loc = window.location
-    "#{loc.protocol}//#{loc.host}"
-
-
   correct_url: ->
     if this.active
-      if window.location.hash.indexOf('#/') == 0
+
+      if window.location.hash.indexOf('#') == 0   # if url has a '#' in it treat it as a non history interface hash based scheme url
         if !window.history.pushState
           Ajaxify.load_page_from_hash = true   # notify Ajaxify that a hash will be loaded and ignore all other calls to load until hash url is loaded
         else
-          path = window.location.pathname + window.location.hash.replace(/#\//, "")       # load proper url in case url contains #/ and browser supports history api
+          # load proper url in case browser supports history api
+          path = window.location.pathname
+          path = '' if path == '/'
+          path = path + window.location.hash.replace(/#/, "")
           window.location.href = "#{this.protocol_with_host()}#{path}"
 
-      else if !window.history.pushState
-        # move path behind # for browsers without history api
-        if window.location.pathname != '/'
-          base_path_regexp = this.base_path_regexp()
-          if base_path_regexp and (match = window.location.pathname.match(base_path_regexp))
-            if match[0] == window.location.pathname
-              if window.location.search == ''
-                return
-              else
-                path = match[0].replace(/\?/,'') + '#'
-            else
-              path = "#{match[0]}##{window.location.pathname}"
-          else
-            path = "/##{window.location.pathname}"
+      else if !window.history.pushState # move path behind '#' for browsers without history api
 
-          window.location.href = "#{this.protocol_with_host()}#{path}#{window.location.search}"
-        else
+        if window.location.pathname == '/'
           if window.location.search != ''
-            window.location.href = "#{this.protocol_with_host()}/##{window.location.search}" # move search behind #
+            window.location.href = "#{this.protocol_with_host()}/#/#{window.location.search}" # move search behind #
+            return
+
+        base_path_regexp = this.base_path_regexp()
+        if base_path_regexp and (match = window.location.pathname.match(base_path_regexp))
+          if match[0] == window.location.pathname
+            if window.location.search == ''
+              return   # we are on a base path here already, so don't do anything
+            else
+              path = match[0].replace(/\?/,'') + '#'
+          else
+            path = "#{match[0].replace(/\/$/,'')}#/#{window.location.pathname.replace(match[0],'')}"
+        else
+          path = "/##{window.location.pathname}"
+
+        window.location.href = "#{this.protocol_with_host()}#{path}#{window.location.search}"
+
 
   init: ->
     this.correct_url()
 
+
+  #
+  # utility functions
+  #
+
   is_string: (variable) ->
     Object.prototype.toString.call(variable) == '[object String]'
+
+  regexp_escape: (str) ->
+    str.replace new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&'
+
+  protocol_with_host: ->
+    loc = window.location
+    "#{loc.protocol}//#{loc.host}"
 
 
 jQuery ->
