@@ -75,7 +75,7 @@ update the page's title tag after the main content has changed.
 
 It's a common use case to have a navigation that needs to change its appearence and possibly functioning when the user navigates
 to a different section of the page. Ajaxify provides a success callback that is triggered after successful
-updates of he page's main content. Just hook into it in your javascript and make your layout changes:
+updates of the page's main content. Just hook into it in your javascript and make your layout changes:
 
     Ajaxify.success ->
       # update navigation and/or other layout elements
