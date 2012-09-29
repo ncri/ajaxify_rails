@@ -79,7 +79,7 @@ update the page's title tag after the main content has changed.
 
 It's a common use case to have a navigation that needs to change its appearence and possibly functioning when the user navigates
 to a different section of the page. Ajaxify provides a success callback that is triggered after successful
-updates of he page's main content. Just hook into it in your javascript and make your layout changes:
+updates of the page's main content. Just hook into it in your javascript and make your layout changes:
 
     Ajaxify.success ->
       # update navigation and/or other layout elements
@@ -102,7 +102,7 @@ Also make sure that you supply invisible wrapper tags in your layout with the fl
 We all know them. Those big requests changing the layout of the page so significantly that 
 loading ajax into a content area and doing some minor layout tweaks here and there simply doesn't cut it. Sigh.
 
-There might also be links and forms that have already their own ajax functionality.
+There might also be links and forms which already have their own ajax functionality.
 
 To turn Ajaxify off for certain links and forms, simply add the class `no_ajaxify` directly to the link or form:
 
