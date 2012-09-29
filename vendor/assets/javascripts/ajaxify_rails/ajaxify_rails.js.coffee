@@ -150,10 +150,10 @@
         $.cookie cookie_name, null
         $("##{this}").show()
         if self.flash_effect
+          if self.clear_flash_effect
+            self.clear_flash_effect this
           self.flash_effect this
       else
-        if self.clear_flash_effect
-          self.clear_flash_effect this
         $("##{this}").hide()
 
 
