@@ -92,19 +92,19 @@ By default, only `flash[:notice]` is supported. If you are using for example `fl
 
     Ajaxify.flash_types = ['notice', 'warning']
     
-Also make sure that you supply invisible wrapper tags in your layout with the flash type as its id, e.g.:
+Also make sure that you supply invisible wrapper tags in your layout for each flash type you use, with the id set to the type, e.g.:
 
     #notice{ style: "#{'display:none' unless flash[:notice]}" }
       = flash[:notice] 
     
-### Links that need to trigger full Page Reloads
+### Links or Forms that need to trigger full Page Reloads
 
 We all know them. Those big requests changing the layout of the page so significantly that 
 loading ajax into a content area and doing some minor layout tweaks here and there simply doesn't cut it. Sigh.
 
 There might also be links and forms which already have their own ajax functionality.
 
-To turn Ajaxify off for certain links and forms, simply add the class `no_ajaxify` directly to the link or form:
+Well, to turn Ajaxify off for certain links and forms, simply add the class `no_ajaxify` directly to the link or form:
 
     = link_to 'Change everything!', re_render_it_all_path, class: 'no_ajaxify'
 
