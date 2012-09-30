@@ -101,12 +101,12 @@ Also make sure that you supply invisible wrapper tags in your layout for each fl
     
 ### Links or Forms that need to trigger full Page Reloads
 
-We all know them. Those big requests changing the layout of the page so significantly that 
-loading ajax into a content area and doing some minor layout tweaks here and there simply doesn't cut it. Sigh.
+Sometimes requests change the layout of the page so significantly that loading only the main content via Ajax
+and doing some minor layout tweaks here and there are simply not sufficient.
 
-There might also be links and forms which already have their own ajax functionality.
+There might also be links and forms which already have their own Ajax functionality.
 
-Well, to turn Ajaxify off for certain links and forms, simply add the class `no_ajaxify` directly to the link or form:
+For these cases you can turn off Ajaxify, by simply adding the class `no_ajaxify` directly to links or forms:
 
     = link_to 'Change everything!', re_render_it_all_path, class: 'no_ajaxify'
 
