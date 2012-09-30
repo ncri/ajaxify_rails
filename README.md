@@ -158,7 +158,7 @@ Here is a reference of all options and callbacks you can set on the client side 
 
     Option/Callback        Default      Description
 
-    active                 true         Toggles link ajaxification.
+    active                 true         Switches Ajaxify on or off. Needs to be set before Ajaxify.init() is called.
     content_container     'main'        Id of the container to insert the main content into ("yield wrapper").
     base_paths             null         Base path segments for applications with root url redirects.
 
