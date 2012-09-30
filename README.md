@@ -2,14 +2,14 @@
 
 No more full page reloads for your Rails app! Yay! 
 
-Automatically makes your app loading content in the background via ajax.
+Automatically makes your app loading content in the background via Ajax.
 
-Works by turning all internal links into ajax links that trigger an update of the page's content area. 
-Also form submissions are automatically turned into ajax requests.
+Works by turning all internal links into Ajax links that trigger an update of the page's content area. 
+Also form submissions are automatically turned into Ajax requests.
 
 Features: 
 
-- Uses the html5 history interface for changing the url and making the browser's back and forward buttons work with ajax.
+- Uses the html5 history interface for changing the url and making the browser's back and forward buttons work with Ajax.
 - Falls back to a hash based approach for browsers without the history interface (like Internet Explorer version <10)
 - Hash based and non-hash URLs are interchangeable.
 - Transparently handles redirects and supports page titles and flash messages.
@@ -66,9 +66,9 @@ You can change the content wrapper in your javascript by setting
     
 ### Loader Animation
 
-You probably like to have a loader image to be displayed to the user while content loads via ajax.
+You probably like to have a loader image to be displayed to the user while content loads via Ajax.
 This is simple. Ajaxify automatically inserts a loader div with the class `ajaxify_loader` into
-the content wrapper before starting an ajax request. So just supply styles for `.ajaxify_loader` in your css, with an
+the content wrapper before starting an Ajax request. So just supply styles for `.ajaxify_loader` in your css, with an
 animated gif as a background.
     
 
@@ -89,7 +89,7 @@ updates of the page's main content. Just hook into it in your javascript and mak
 
 ### Flash Messages
 
-Ajaxify Rails correctly displays your flash messages after ajaxified requests. To do so it stores them in cookies.
+Ajaxify correctly displays your flash messages after ajaxified requests. To do so it stores them in cookies.
 By default, only `flash[:notice]` is supported. If you are using for example `flash[:warning]` as well you have to set:
 
     Ajaxify.flash_types = ['notice', 'warning']
