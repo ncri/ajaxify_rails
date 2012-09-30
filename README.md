@@ -17,7 +17,9 @@ Features:
 
 Demo: http://ajaxify-demo.herokuapp.com/
 
-Inspired by the pjax_rails gem (https://github.com/rails/pjax_rails)
+Blog Post: http://rubyandrails.posterous.com/introducing-the-ajaxify-rails-gem
+
+Inspired by the pjax_rails gem (https://github.com/rails/pjax_rails).
 
 ## Requirements
 
