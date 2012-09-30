@@ -74,8 +74,8 @@ animated gif as a background.
 
 ### Page Title
 
-If you define a method called `page_title` in your application controller, Ajaxify will automatically
-update the page's title tag after the main content has changed.
+If you define a method called `page_title` in your application controller, returning the current page's title, Ajaxify will
+use it to automatically update the title tag after the main content has changed.
 
 ### Navigation and other Layout Updates
 
