@@ -15,7 +15,7 @@ Features:
 - Transparently handles redirects and supports page titles and flash messages.
 - Tested with Chrome, Firefox, Safari and Internet Explorer 8+
 
-Demo: http://ajaxify-demo.herokuapp.com/
+Demo: http://ajaxify-demo.herokuapp.com/ (the first page load might take a while, as heroku needs to spin up a dyno)
 
 Blog Post: http://rubyandrails.posterous.com/introducing-the-ajaxify-rails-gem
 
