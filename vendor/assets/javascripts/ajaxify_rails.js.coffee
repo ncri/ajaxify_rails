@@ -12,7 +12,6 @@
   on_before_load: null
   on_success: null
   on_success_once: null
-  on_before_correct_url: null
 
   # flash
   #
@@ -141,13 +140,11 @@
           self.on_ajaxify_success data, status, jqXHR, pop_state, options
 
 
-  show_flash: () ->
+  show_flashes: (flashes) ->
     self = this
     $.each this.flash_types, ->
-      cookie_name = "flash_#{this}"
-      if $.cookie cookie_name
-        $("##{this}").html $.cookie(cookie_name)
-        $.cookie cookie_name, null
+      if flashes and flashes[this]
+        $("##{this}").html flashes[this]
         $("##{this}").show()
         if self.flash_effect
           if self.clear_flash_effect
@@ -162,12 +159,13 @@
     $("##{this.content_container}").html data
 
     title = $('#ajaxify_content').data('page-title')
+    flashes = $('#ajaxify_content').data('flashes')
 
     # Correct the url after a redirect and when it has the ajaxify param in it.
     # The latter can happen e.g. for pagination links that are auto generated.
-    current_url = $('#ajaxify_content #ajaxify_location').text()
+    current_url = $('#ajaxify_content #ajaxify_location').html()
     if options.url != current_url
-      options.url = current_url.replace(/(&|\?)ajaxify_redirect=true/,'')
+      options.url = current_url.replace(/(&|&amp;|\?)ajaxify_redirect=true/,'')
       options.type = 'GET'
 
     this.update_url options, pop_state
@@ -180,7 +178,7 @@
     if title
       document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
 
-    this.show_flash()
+    this.show_flashes(flashes)
 
     if this.on_success
       this.on_success( data, status, jqXHR, options.url )
@@ -237,6 +235,9 @@
     if this.active
 
       if window.location.hash.indexOf('#') == 0   # if url has a '#' in it treat it as a non history interface hash based scheme url
+
+        return unless window.location.hash.match(/^#(\/|\?)/) # check hash format
+
         if !window.history.pushState
           Ajaxify.load_page_from_hash = true   # notify Ajaxify that a hash will be loaded and ignore all other calls to load until hash url is loaded
         else

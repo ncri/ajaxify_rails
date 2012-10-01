@@ -89,7 +89,7 @@ updates of the page's main content. Just hook into it in your javascript and mak
 
 ### Flash Messages
 
-Ajaxify correctly displays your flash messages after ajaxified requests. To do so it stores them in cookies.
+Ajaxify correctly displays your flash messages after ajaxified requests.
 By default, only `flash[:notice]` is supported. If you are using for example `flash[:warning]` as well you have to set:
 
     Ajaxify.flash_types = ['notice', 'warning']
