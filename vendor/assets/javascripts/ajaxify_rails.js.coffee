@@ -252,7 +252,7 @@
         if window.location.pathname == '/'
           if window.location.search != ''
             window.location.href = "#{this.protocol_with_host()}/#/#{window.location.search}" # move search behind #
-            return
+          return
 
         base_path_regexp = this.base_path_regexp()
         if base_path_regexp and (match = window.location.pathname.match(base_path_regexp))
