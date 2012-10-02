@@ -227,7 +227,7 @@
     self = this
     new RegExp("^\/(#{ $.map(this.base_paths, (el) ->
       el = self.regexp_escape el
-      "#{el}$|#{el}\/|#{el}\\?"
+      "##{el}($|\/|\\?)"
     ).join('|')})", 'i')
 
 
