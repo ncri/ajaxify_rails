@@ -158,9 +158,10 @@ Here is a reference of all options and callbacks you can set on the client side 
 
     Option/Callback        Default      Description
 
-    active                 true         Switches Ajaxify on or off. Needs to be set before Ajaxify.init() is called.
+    active                 true         Switches Ajaxify on or off. Needs to be set before Ajaxify.init().
     content_container     'main'        Id of the container to insert the main content into ("yield wrapper").
-    base_paths             null         Base path segments for applications with root url redirects.
+    base_paths             null         Base path segments for applications with root url redirects. 
+                                        Needs to be set before Ajaxify.init().
 
     on_before_load         null         Callback: Called before the ajaxify request is started.
     on_success             null         Callback: Called when an ajaxify requests finished successfully.
