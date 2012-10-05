@@ -133,7 +133,7 @@ Important: `Ajaxify.base_paths` need to be set before `Ajaxify.init()` is called
 
 Sometimes you need to do non trivial modifications of the layout whenever the content in the main content area of your site changes.
 Ajaxify allows you to attach arbitrary html to ajaxified requests. This extra html is then stripped from the main content
-that is inserted in the content area. But before that a callback is triggered which can be used to grab the extra content and do something with it.
+that is inserted into the content area. But before that a callback is triggered which can be used to grab the extra content and do something with it.
 To use this feature you need to provide a method `ajaxify_extra_content` in your ApplicationController:
 
     def ajaxify_extra_content
