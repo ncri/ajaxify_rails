@@ -151,10 +151,15 @@ And then, on the client side hook into Ajaxify using the `handle_extra_content` 
     Ajaxify.handle_extra_content = ->
       $('#my_fancy_widget').html $('#ajaxify_content #my_fancy_widget_html').html()
 
+Tip: you can call view helpers to render extra content from within your controller using the view_context:
+
+    def ajaxify_extra_content
+      view_context.my_fancy_widget
+    end
 
 ### Reference: All Javascript Options and Callbacks
 
-Here is a reference of all options and callbacks you can set on the client side via `Ajaxify.<i>option_or_callback</i> =` :
+Here is a reference of all options and callbacks you can set on the client side via Ajaxify.<i>option_or_callback</i> = :
 
     Option/Callback        Default      Description
 
@@ -166,7 +171,7 @@ Here is a reference of all options and callbacks you can set on the client side 
     on_before_load         null         Callback: Called before the ajaxify request is started.
     on_success             null         Callback: Called when an ajaxify requests finished successfully.
     on_success_once        null         Callback: Like on_success but only called once.
-    handle_extra_content   null         Callback: Called before extra content is stripped from the ajax request's response.
+    handle_extra_content   null         Callback: Called before extra content is stripped from the Ajax request's response.
 
     flash_types            ['notice']   Flash types your Rails app uses. E.g. ['notice', 'warning', 'error']
     flash_effect           null         Callback: Called for each flash type after flash is set.
