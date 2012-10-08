@@ -17,6 +17,8 @@ Features:
 
 Demo: http://ajaxify-demo.herokuapp.com/ (the first page load might take a while, as heroku needs to spin up a dyno)
 
+Demo source: https://github.com/ncri/ajaxify_rails_demo_app
+
 Blog Post: http://rubyandrails.posterous.com/introducing-the-ajaxify-rails-gem
 
 Inspired by the pjax_rails gem (https://github.com/rails/pjax_rails).
@@ -49,7 +51,6 @@ work most effectively.
 The later you call `init()`, the later potential redirects from one scheme to another are performed,
 which means the more unnecessary work the browser has to do.
 
-
 ### Content Area
 
 Ajaxify assumes that your app has a content container html tag with the id `main`.
@@ -59,9 +60,14 @@ If yield doesn't have a wrapper in your app yet, you need to supply one to get a
     #main
       = yield
 
-You can change the content wrapper in your javascript by setting
+You can set the content container of your app when initializing Ajaxify:
 
-    Ajaxify.content_container = 'content_container_id'
+    Ajaxify.init 
+      content_container: 'content_container_id'
+
+or later using `set_content_container`:
+
+    Ajaxify.set_content_container('content_container_id')
     
     
 ### Loader Animation
@@ -81,18 +87,20 @@ use it to automatically update the title tag after the main content has changed.
 
 It's a common use case to have a navigation that needs to change its appearence and possibly functioning when the user navigates
 to a different section of the page. Ajaxify provides a success callback that is triggered after successful
-updates of the page's main content. Just hook into it in your javascript and make your layout changes:
+updates of the page's main content. Just bind to the `ajaxify:content_loaded' event and make your layout changes:
 
-    Ajaxify.success ->
+    $('body').on 'ajaxify:content_loaded', ->
       # update navigation and/or other layout elements
 
 
 ### Flash Messages
 
 Ajaxify correctly displays your flash messages after ajaxified requests.
-By default, only `flash[:notice]` is supported. If you are using for example `flash[:warning]` as well you have to set:
+By default, only `flash[:notice]` is supported. If you are using for example `flash[:warning]` as well you have to add the flash_types
+option to the `Ajaxify.init()` call:
 
-    Ajaxify.flash_types = ['notice', 'warning']
+    Ajaxify.init 
+      flash_types: ['notice', 'warning']
     
 Also make sure that you supply invisible wrapper tags in your layout for each flash type you use, with the id set to the type, e.g.:
 
@@ -124,7 +132,8 @@ paths.
 Example: if your app's root url potentially redirects to `your_domain.com/en/` and `your_domain.com/de/`
 you need to hint Ajaxyfiy like this:
 
-    Ajaxify.base_paths = ['de', 'en']
+    Ajaxify.init
+      base_paths = ['de', 'en']
 
 Important: `Ajaxify.base_paths` need to be set before `Ajaxify.init()` is called!
 
@@ -146,9 +155,9 @@ For example you could provide url for a widget in the layout like this:
       "<div id='my_fancy_widget_html'> some html </div>"
     end
 
-And then, on the client side hook into Ajaxify using the `handle_extra_content` callback and select the widget html via `#ajaxify_content`:
+And then, on the client side bind to the `ajaxify:content_inserted` event and select the widget html via `#ajaxify_content`:
 
-    Ajaxify.handle_extra_content = ->
+    $('body').on 'ajaxify:content_inserted', ->
       $('#my_fancy_widget').html $('#ajaxify_content #my_fancy_widget_html').html()
 
 Tip: you can call view helpers to render extra content from within your controller using the view_context:
@@ -157,27 +166,25 @@ Tip: you can call view helpers to render extra content from within your controll
       view_context.my_fancy_widget
     end
 
-### Reference: All Javascript Options and Callbacks
+### Ajaxify Events
 
-Here is a reference of all options and callbacks you can set on the client side via Ajaxify.<i>option_or_callback</i> = :
+Ajaxify provides a few jQuery events you can bind to:
 
-    Option/Callback        Default      Description
+* `ajaxify:before_load` => Triggered before the ajaxify request is started. Params: `url`.
+* `ajaxify:content_loaded` => Triggered after an ajaxify request finished successfully. Params: `data, status, jqXHR, url`.
+* `ajaxify:content_inserted` => Triggered after an ajaxify request finished but before extra content is stripped from the response.
+* `ajaxify:flash_displayed` => Triggered after a flash message is displayed. Parameters: `flash_type`.
 
-    active                 true         Switches Ajaxify on or off. Needs to be set before Ajaxify.init().
-    content_container     'main'        Id of the container to insert the main content into ("yield wrapper").
-    base_paths             null         Base path segments for applications with root url redirects. 
-                                        Needs to be set before Ajaxify.init().
 
-    on_before_load         null         Callback: Called before the ajaxify request is started.
-    on_success             null         Callback: Called when an ajaxify requests finished successfully.
-    on_success_once        null         Callback: Like on_success but only called once.
-    handle_extra_content   null         Callback: Called before extra content is stripped from the Ajax request's response.
+### Javascript
 
-    flash_types            ['notice']   Flash types your Rails app uses. E.g. ['notice', 'warning', 'error']
-    flash_effect           null         Callback: Called for each flash type after flash is set.
-    clear_flash_effect     null         Callback: Called for each flash type whenever flash message is not present
+Put your javascript into an `ajaxify:content_loaded` event handler, to make sure it is executed after content has 
+loaded via Ajaxify. You can't use dom ready for example as that only gets triggered for full page relaods.
 
-Also check the example app source code for usage: https://github.com/ncri/ajaxify_rails_demo_app
+
+### Toggle Ajaxify
+
+You can temporarily deactivate Ajaxify by calling `Ajaxify.activate(false)`. You can switch it on again with `Ajaxify.activate()`.
 
 
 ## Contributing
