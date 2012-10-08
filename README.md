@@ -10,7 +10,7 @@ Also form submissions are automatically turned into Ajax requests.
 Features: 
 
 - Uses the html5 history interface for changing the url and making the browser's back and forward buttons work with Ajax.
-- Falls back to a hash based approach for browsers without the history interface (like Internet Explorer version <10).
+- Falls back to a hash based URL approach for browsers without the history interface (like Internet Explorer version <10).
 - Hash based and non-hash URLs are interchangeable.
 - Transparently handles redirects and supports page titles and flash messages.
 - Tested with Chrome, Firefox, Safari and Internet Explorer 8+.
