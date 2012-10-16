@@ -107,7 +107,7 @@ Also make sure that you supply invisible wrapper tags in your layout for each fl
     #notice{ style: "#{'display:none' unless flash[:notice]}" }
       = flash[:notice] 
     
-### Links or Forms that need to trigger full Page Reloads
+### Full Page Reloads
 
 Sometimes requests change the layout of the page so significantly that loading only the main content via Ajax
 and doing some minor layout tweaks here and there are simply not sufficient.
