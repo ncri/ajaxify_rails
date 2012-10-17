@@ -178,8 +178,9 @@ Ajaxify provides a few jQuery events you can bind to:
 
 ### Javascript
 
-Put your javascript into an `ajaxify:content_loaded` event handler, to make sure it is executed after content has 
-loaded via Ajaxify. You can't use dom ready for example as that only gets triggered for full page reloads.
+In addition to calling your javascript e.g. in a dom ready event handler (or in your layout), you should also
+call it in an `ajaxify:content_loaded` event handler, to make sure it is executed after content has
+loaded via Ajaxify.
 
 
 ### Toggle Ajaxify

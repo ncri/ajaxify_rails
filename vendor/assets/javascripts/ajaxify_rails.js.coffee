@@ -12,6 +12,8 @@ initial_history_state =
   data:
     ajaxified: true
 
+base_path_regexp_cache = null
+
 
 activate = (new_active = true) ->
   active = new_active
@@ -78,12 +80,23 @@ ajaxify = ->
       ignore_hash_change = false
 
 
+base_path_regexp = ->
+  return null unless base_paths
+  return base_path_regexp_cache if base_path_regexp_cache
+  # match starting and ending with base path, e.g. "^\/en$" (i.e. we are at the base path root) or
+  # starting with base path and continuing with '/', e.g. "^\/en\/" (i.e. we are NOT at the base path root) or
+  # starting with base path and continuing with '?', e.g. "^\/en\?" (i.e. we are at the base path root and have query params)
+  base_path_regexp_cache = new RegExp("^\/(#{ $.map(base_paths, (el) ->
+    el = regexp_escape el
+    "##{el}($|\/|\\?)"
+  ).join('|')})", 'i')
+
+
 # load content from url hash (non history interface browsers)
 on_hash_change = ->
   url = window.location.hash.replace(/#/, "")
 
-  base_path_regexp = base_path_regexp()
-  if match = window.location.pathname.match(base_path_regexp)
+  if match = window.location.pathname.match(base_path_regexp())
     url = match[0] + url
 
   url = '/' if url == ''
@@ -192,23 +205,11 @@ update_url = (options, pop_state = false) ->
       ignore_hash_change = true  # for non histroy interface browsers: avoids loading the page for hash changes caused by link clicks
       hash = "#{options.url.replace(new RegExp(protocol_with_host()), '')}"
 
-      base_path_regexp = base_path_regexp()
-      if base_path_regexp
-        hash = hash.replace(base_path_regexp, '')
+      if base_path_regexp()
+        hash = hash.replace(base_path_regexp(), '')
         hash = "/#{hash}" unless hash == '' or hash.indexOf('/') == 0
 
       window.location.hash = hash
-
-
-base_path_regexp = ->
-  return null unless base_paths
-  # match starting and ending with base path, e.g. "^\/en$" (i.e. we are at the base path root) or
-  # starting with base path and continuing with '/', e.g. "^\/en\/" (i.e. we are NOT at the base path root) or
-  # starting with base path and continuing with '?', e.g. "^\/en\?" (i.e. we are at the base path root and have query params)
-  new RegExp("^\/(#{ $.map(base_paths, (el) ->
-    el = regexp_escape el
-    "##{el}($|\/|\\?)"
-  ).join('|')})", 'i')
 
 
 correct_url = ->
@@ -234,8 +235,7 @@ correct_url = ->
           window.location.href = "#{protocol_with_host()}/#/#{window.location.search}" # move search behind #
         return
 
-      base_path_regexp = base_path_regexp()
-      if base_path_regexp and (match = window.location.pathname.match(base_path_regexp))
+      if base_path_regexp() and (match = window.location.pathname.match(base_path_regexp()))
         if match[0] == window.location.pathname
           if window.location.search == ''
             return   # we are on a base path here already, so don't do anything
@@ -270,7 +270,7 @@ protocol_with_host = ->
   "#{loc.protocol}//#{loc.host}"
 
 
-@Ajaxify = { init, ajaxify, load, activate, set_content_container, get_content_container }
+@Ajaxify = { init, ajaxify, load, update_url, activate, set_content_container, get_content_container }
 
 
 jQuery ->
