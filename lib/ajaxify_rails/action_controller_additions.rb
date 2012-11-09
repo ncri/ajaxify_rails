@@ -25,7 +25,7 @@ module ActionControllerAdditions
         if ajaxified?
           args = _normalize_args(*args, &block)
           layout = args[:layout] || current_layout
-          layout = (layout == 'application' or layout == true) ? false : layout
+          layout = (layout == 'application' or layout == true or layout == false) ? false : layout
           args[:layout] = layout
 
           flashes = {}
@@ -59,6 +59,7 @@ module ActionControllerAdditions
       def current_layout
         return @current_layout if @current_layout
         @current_layout = _layout
+        return @current_layout if @current_layout == false
         @current_layout = File.basename(@current_layout.identifier).split('.').first unless @current_layout.instance_of? String
         @current_layout
       end
