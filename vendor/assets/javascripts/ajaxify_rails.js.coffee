@@ -66,8 +66,9 @@ ajaxify = ->
 
 
   # (history interface browsers only)
-  window.onpopstate = (e) ->
-    if e.state
+  $(window).on 'popstate', (e) ->
+    e = e.originalEvent
+    if e.state and e.state.data and e.state.data.ajaxified
       e.state.cache = false
       load e.state, true
 
@@ -195,6 +196,8 @@ update_url = (options, pop_state = false) ->
         window.history.replaceState initial_history_state, ''
         initial_history_state = ''
 
+      options.data ||= {}
+      options.data.ajaxified = true
       window.history.pushState
         url: options.url
         data: options.data
