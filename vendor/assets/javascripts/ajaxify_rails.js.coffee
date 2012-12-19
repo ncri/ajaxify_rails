@@ -29,8 +29,8 @@ ajaxify = ->
 
   if active
 
-    if load_page_from_hash
-      load_page_from_hash = false
+    if Ajaxify.load_page_from_hash
+      Ajaxify.load_page_from_hash = false
       on_hash_change()
 
     protocol_and_hostname = "#{window.location.protocol}//#{window.location.hostname}"
@@ -110,7 +110,7 @@ on_hash_change = ->
 
 load = (options, pop_state = false) ->
 
-  unless load_page_from_hash
+  unless Ajaxify.load_page_from_hash
 
     data = options.data || { ajaxified: true }
 
@@ -126,7 +126,7 @@ load = (options, pop_state = false) ->
     if options.confirm
       return false unless confirm options.confirm
 
-    $('body').trigger 'ajaxify:before_load', [options.url]
+    $(document).trigger 'ajaxify:before_load', [options.url]
 
     $.ajax
       url: options.url
@@ -149,7 +149,7 @@ show_flashes = (flashes) ->
     if flashes and flashes[this]
       $("##{this}").html flashes[this]
       $("##{this}").show()
-      $('body').trigger 'ajaxify:flash_displayed', [this]
+      $(document).trigger 'ajaxify:flash_displayed', [this]
 
     else
       $("##{this}").hide()
@@ -171,7 +171,7 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   update_url options, pop_state
 
-  $('body').trigger 'ajaxify:content_inserted'
+  $(document).trigger 'ajaxify:content_inserted'
 
   $("##{content_container} #ajaxify_content").remove()
 
@@ -180,7 +180,7 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   show_flashes(flashes)
 
-  $('body').trigger('ajaxify:content_loaded', [data, status, jqXHR, options.url])
+  $(document).trigger('ajaxify:content_loaded', [data, status, jqXHR, options.url])
 
 
 update_url = (options, pop_state = false) ->
