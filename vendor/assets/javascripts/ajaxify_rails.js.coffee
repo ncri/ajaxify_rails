@@ -89,7 +89,7 @@ base_path_regexp = ->
   # starting with base path and continuing with '?', e.g. "^\/en\?" (i.e. we are at the base path root and have query params)
   base_path_regexp_cache = new RegExp("^\/(#{ $.map(base_paths, (el) ->
     el = regexp_escape el
-    "##{el}($|\/|\\?)"
+    "#{el}($|\/|\\?)"
   ).join('|')})", 'i')
 
 
