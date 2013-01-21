@@ -240,7 +240,11 @@ correct_url = ->
           else
             path = match[0].replace(/\?/,'') + '#'
         else
-          path = "#{match[0].replace(/\/$/,'')}#/#{window.location.pathname.replace(match[0],'')}"
+          path = "#{match[0].replace(/\/$/,'')}#/#{window.location.pathname.replace(match[0],'')}"  
+      else if window.location.pathname == '/'
+        if window.location.search != ''
+          window.location.href = "#{protocol_with_host()}/#/#{window.location.search}" # move search behind #
+        return
       else
         path = "/##{window.location.pathname}"
 
