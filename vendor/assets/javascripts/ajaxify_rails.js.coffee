@@ -233,11 +233,6 @@ correct_url = ->
 
     else if !window.history.pushState # move path behind '#' for browsers without history api
 
-      if window.location.pathname == '/'
-        if window.location.search != ''
-          window.location.href = "#{protocol_with_host()}/#/#{window.location.search}" # move search behind #
-        return
-
       if base_path_regexp() and (match = window.location.pathname.match(base_path_regexp()))
         if match[0] == window.location.pathname
           if window.location.search == ''
