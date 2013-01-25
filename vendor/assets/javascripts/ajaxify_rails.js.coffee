@@ -3,6 +3,7 @@ active = true
 content_container = 'main'
 base_paths = null
 flash_types = ['notice']
+dont_correct_url = false
 
 ignore_hash_change = null
 load_page_from_hash = null
@@ -255,7 +256,7 @@ init = (options = {}) ->
   flash_types = options.flash_types if 'flash_types' of options
   active = options.active if 'active' of options
   content_container = options.content_container if 'content_container' of options
-  correct_url()
+  correct_url() unless 'dont_correct_url' of options and options.dont_correct_url
 
 #
 # utility functions
