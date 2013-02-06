@@ -34,7 +34,6 @@ module ActionControllerAdditions
             flash[key] = nil
           end
 
-
           extra_content = ajaxify_extra_content
 
           super args
@@ -49,10 +48,16 @@ module ActionControllerAdditions
                                                        id: 'ajaxify_content', style: 'display:none',
                                                        data: { page_title: page_title,
                                                                flashes: flashes.to_json } )
-          response.body = self.response_body[0]
+          response.body = response_body[0]
           return
         end
         super
+        # Correcting urls for non histori api browsers wont work for post requests so add a meta tag to the response body to communicate this to
+        # the ajaxify javascript
+        if request.post? and not request.xhr?
+          response.body = response_body[0].sub('<head>', "<head>\n    <meta name='ajaxify:dont_correct_url' content='true'>")
+        end
+        return
       end
 
 

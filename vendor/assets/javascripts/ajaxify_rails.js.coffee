@@ -241,7 +241,7 @@ correct_url = ->
           else
             path = match[0].replace(/\?/,'') + '#'
         else
-          path = "#{match[0].replace(/\/$/,'')}#/#{window.location.pathname.replace(match[0],'')}"  
+          path = "#{match[0].replace(/\/$/,'')}#/#{window.location.pathname.replace(match[0],'')}"
       else if window.location.pathname == '/'
         if window.location.search != ''
           window.location.href = "#{protocol_with_host()}/#/#{window.location.search}" # move search behind #
@@ -256,7 +256,7 @@ init = (options = {}) ->
   flash_types = options.flash_types if 'flash_types' of options
   active = options.active if 'active' of options
   content_container = options.content_container if 'content_container' of options
-  correct_url() unless 'dont_correct_url' of options and options.dont_correct_url
+  correct_url() unless $('meta[name="ajaxify:dont_correct_url"]').length > 0
 
 #
 # utility functions
