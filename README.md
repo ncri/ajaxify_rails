@@ -26,6 +26,7 @@ Inspired by the pjax_rails gem (https://github.com/rails/pjax_rails).
 ## Requirements
 
 - Ruby 1.9 and the asset pipeline.
+- jQuery
 - Your app doesn't use named anchors (#). Named anchors can't be correctly represented in the fallback hash based url scheme.
 
 ## Installation
