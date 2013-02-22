@@ -154,7 +154,6 @@ describe 'Test convert urls', :js => true do
 	it 'should convert a hash url to a proper one in a browser supporting pushState' do
 		visit root_path(ajaxify_on: true, anchor: '/home/page1')
 		should_have_content 'Page 1 Content'
-    sleep 5
 		push_state_path_should_be '/home/page1'
 	end
 
