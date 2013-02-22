@@ -34,7 +34,6 @@ Capybara.default_wait_time = 3
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   #config.run_all_when_everything_filtered = true
-  config.use_transactional_fixtures = false
   config.include Capybara::DSL
 end
 
