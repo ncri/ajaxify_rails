@@ -20,4 +20,15 @@ Gem::Specification.new do |gem|
   gem.version       = AjaxifyRails::VERSION
 
   gem.add_dependency 'rails', '>= 3.1.0'
+
+  gem.add_development_dependency 'jquery-rails'
+  gem.add_development_dependency 'rspec-rails', '2.9'
+  gem.add_development_dependency 'rspec-steps'
+  gem.add_development_dependency 'capybara'
+  gem.add_development_dependency 'selenium-webdriver', '>= 2.30.0'
+  gem.add_development_dependency 'sqlite3'
+  gem.add_development_dependency 'haml', '>= 3.1.5'
+  gem.add_development_dependency 'sass-rails', '~> 3.2.3'
+  gem.add_development_dependency 'coffee-rails', '~> 3.2.1'
+  #gem.add_development_dependency 'poltergeist'
 end

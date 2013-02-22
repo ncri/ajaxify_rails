@@ -4,6 +4,7 @@
 .config
 .yardoc
 .idea
+.sass-cache
 Gemfile.lock
 InstalledFiles
 _yardoc
@@ -16,3 +17,6 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+spec/ajaxify_test/log
+spec/ajaxify_test/tmp
+.DS_Store
