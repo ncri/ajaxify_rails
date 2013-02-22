@@ -1,0 +1,47 @@
+!!! 5
+%html
+  %head
+    %meta(content="text/html; charset=utf-8" http-equiv="Content-Type")
+
+    %title= page_title
+
+    = csrf_meta_tag
+    = javascript_include_tag( 'application' )
+    = stylesheet_link_tag "application"
+
+  = content_tag :body, data: { id: Time.now.to_i } do
+
+    -# No need to do call Ajaxify.init obtrusively in your app. Just call it from your js/coffeescript file, as early as possible.
+    -# I only do it hackishly here to access the rails session.
+    :javascript
+      Ajaxify.init( { push_state_enabled: #{(session[:push_state_enabled] == false) ? 'false' : 'true'}, active: #{session[:ajaxify] ? 'true' : 'false'} } );
+
+    - sleep 1
+
+    %h1#title
+      Ajaxify Rails Demo (more info: #{link_to('ajaxify_rails gem', 'https://github.com/ncri/ajaxify_rails')})
+
+    #hints
+      - if session[:ajaxify]
+        Navigate. Note the difference. Also try out the browser's back and forward buttons.
+      - else
+        Navigate. Then switch on Ajaxify (checkbox right).
+
+    #notice{ style: "#{'display:none' unless flash[:notice]}" }= flash[:notice]
+
+    #navigation
+      #toggle_ajaxify
+        Ajaxify
+        = check_box_tag :ajaxify, '1', session[:ajaxify]
+      %ul
+        %li= link_to 'Home', '/', class: current_page?('/') ? 'active' : nil
+        %li= link_to 'Page 1', '/home/page1', class: current_page?('/home/page1') ? 'active' : nil
+        %li= link_to 'Page 2', '/home/page2', class: current_page?('/home/page2') ? 'active' : nil
+        %li= link_to 'Page 3 (redirects to page 1)', '/home/page3', class: current_page?('/home/page3') ? 'active' : nil
+
+    #main
+      = yield
+
+    #footnote
+      Note: Layout rendering is delayed by one second to simulate a complex layout.
+

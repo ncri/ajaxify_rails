@@ -1,0 +1,93 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body{
+  font-family: Arial;
+  color: #555;
+  text-align: left;
+}
+
+#main, #navigation, #notice, #title, #hints, #footnote{
+  margin-top: 20px;
+  width: 650px;
+  margin: 0 auto;
+}
+
+#hints{
+  margin-bottom: 60px;
+  color: orange;
+}
+
+#footnote{
+  font-size: 0.8em;
+  margin-top: 10px;
+  text-align: right;
+}
+
+h1#title{
+  margin: 40px auto 40px;
+  font-size: 20px;
+
+  a{
+    text-decoration: underline;
+  }
+}
+
+#main{
+  border: 1px solid #aaa;
+  padding: 70px 10px 10px;
+  width: 630px;
+  height: 140px;
+  text-align: center;
+}
+
+#notice{
+  width: 630px;
+  padding: 10px;
+  background-color: orange;
+  color: white;
+}
+
+.active{
+  font-weight: bold;
+}
+
+a{
+  text-decoration: none;
+  font-weight: normal;
+  color: #555;
+}
+
+ul{
+  padding-left: 0;
+  margin-left: 0;
+  width: 100%;
+}
+
+li{
+  display: inline-block;
+  padding-right: 15px;
+}
+
+#toggle_ajaxify{
+  float: right;
+}
+
+form{
+  text-align: left;
+  width: 100px;
+  margin: 0 auto;
+}
+
+
+/* Ajaxify */
+
+.ajaxify_loader{
+  width: 32px;
+  height: 32px;
+  margin: 0 auto;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-image: asset-url('ajax-loader.gif', image);
+}
