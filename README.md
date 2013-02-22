@@ -1,4 +1,4 @@
-# Ajaxify Rails [![Build Status](https://secure.travis-ci.org/ncri/ajaxify_rails.png)](http://travis-ci.org/ncri/ajaxify_rails)
+# Ajaxify Rails
 
 No more full page reloads for your Rails app! Yay! 
 
