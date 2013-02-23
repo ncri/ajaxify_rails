@@ -52,7 +52,7 @@ module ActionControllerAdditions
           return
         end
         super
-        # Correcting urls for non histori api browsers wont work for post requests so add a meta tag to the response body to communicate this to
+        # Correcting urls for non history api browsers wont work for post requests so add a meta tag to the response body to communicate this to
         # the ajaxify javascript
         if request.post? and not request.xhr?
           response.body = response_body[0].sub('<head>', "<head>\n    <meta name='ajaxify:dont_correct_url' content='true'>")
