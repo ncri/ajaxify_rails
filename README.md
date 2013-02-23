@@ -131,7 +131,7 @@ about your url structure to not get confused (it creates endless redirects other
 paths.
 
 Example: if your app's root url potentially redirects to `your_domain.com/en/` and `your_domain.com/de/`
-you need to hint Ajaxyfiy like this:
+you need to hint Ajaxify like this:
 
     Ajaxify.init
       base_paths = ['de', 'en']
