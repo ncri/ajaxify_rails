@@ -131,7 +131,7 @@ about your url structure to not get confused (it creates endless redirects other
 paths.
 
 Example: if your app's root url potentially redirects to `your_domain.com/en/` and `your_domain.com/de/`
-you need to hint Ajaxyfiy like this:
+you need to hint Ajaxify like this:
 
     Ajaxify.init
       base_paths = ['de', 'en']
@@ -150,7 +150,7 @@ To use this feature you need to provide a method `ajaxify_extra_content` in your
       ... your extra html ...
     end
 
-For example you could provide url for a widget in the layout like this:
+For example you could provide html for a widget in the layout like this:
 
     def ajaxify_extra_content
       "<div id='my_fancy_widget_html'> some html </div>"
