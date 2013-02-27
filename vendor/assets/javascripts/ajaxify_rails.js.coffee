@@ -94,6 +94,9 @@ ajaxify = ->
 
 
 load = (options, pop_state = false) ->
+
+  $(document).trigger('ajaxify:before_load', [options, pop_state])
+  
   unless load_page_from_hash
 
     data = options.data || { ajaxified: true }
