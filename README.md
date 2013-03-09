@@ -77,7 +77,18 @@ You probably like to have a loader image to be displayed to the user while conte
 This is simple. Ajaxify automatically inserts a loader div with the class `ajaxify_loader` into
 the content wrapper before starting an Ajax request. So just supply styles for `.ajaxify_loader` in your css, with an
 animated gif as a background.
-    
+
+### Scrolling
+
+By default, ajaxify scrolls to the top of the screen when you click on a link.
+You can change this default behavior by setting 'scroll_on_click' to false on init.
+
+    Ajaxify.init
+      scroll_on_click: false
+
+You can also change the setting for individual links by adding classes:
+    = link_to "Scroll to top", scroll_to_top_path, class: 'scroll_to_top'
+    = link_to "Don't scroll", no_scroll_path, class: 'no_scroll'
 
 ### Page Title
 
