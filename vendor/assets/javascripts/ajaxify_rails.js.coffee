@@ -9,6 +9,8 @@ push_state_enabled = true
 ignore_hash_change = null
 load_page_from_hash = null
 
+scroll_on_click = true
+
 initial_history_state =
   url: window.location.href
   data:
@@ -30,7 +32,6 @@ get_content_container = ->
 set_content_container = (new_content_container) ->
   content_container = new_content_container
 
-
 init = (options = {}) ->
   base_paths = options.base_paths if 'base_paths' of options
   flash_types = options.flash_types if 'flash_types' of options
@@ -38,6 +39,7 @@ init = (options = {}) ->
   active = options.active if 'active' of options
   content_container = options.content_container if 'content_container' of options
   correct_url() unless $('meta[name="ajaxify:dont_correct_url"]').length > 0
+  scroll_on_click = options.scroll_on_click if 'scroll_on_click' of options
 
 
 ajaxify = ->
@@ -50,12 +52,15 @@ ajaxify = ->
     protocol_and_hostname = "#{window.location.protocol}//#{window.location.hostname}"
 
     $('body').on 'click', "a[href^='/']:not(.no_ajaxify), a[href^='#{protocol_and_hostname}']:not(.no_ajaxify)", ->
-
       $this = $(this)
+
+      scroll = set_scroll($this[0].className)
+
       load
         url: $this.attr('href')
         type: $this.data('method')
         confirm: $this.data('confirm')
+        scroll: scroll
 
       false
 
@@ -65,6 +70,9 @@ ajaxify = ->
                             form[action='']#{exclude_selector}", ->
 
       $this = $(this)
+
+      scroll = set_scroll($this[0].className)
+
       form_params = $(this).serialize()
       form_params += '&ajaxified=true'
 
@@ -75,6 +83,7 @@ ajaxify = ->
         data: form_params
         type: $this.attr('method')
         confirm: $this.data('confirm')
+        scroll: scroll
 
       false
 
@@ -121,9 +130,11 @@ load = (options, pop_state = false) ->
       cache: true
       beforeSend: (xhr) ->
         $("##{content_container}").html( "<div class='ajaxify_loader'></div>" )
-        $('html, body').animate
-          scrollTop:0
-          , 500
+
+        unless options.scroll is null
+          scroll_to_top() if options.scroll
+        else
+          scroll_to_top() if scroll_on_click
 
       success: (data, status, jqXHR) ->
         on_ajaxify_success data, status, jqXHR, pop_state, options
@@ -280,6 +291,18 @@ protocol_with_host = ->
 push_state = ->
   push_state_enabled and window.history.pushState 
 
+set_scroll = (class_name) ->
+  scroll_to_top = class_name.search /scroll_to_top/
+  no_scroll = class_name.search /no_scroll/
+
+  return true if scroll_to_top != -1 
+  return false if no_scroll != -1
+  return null
+
+scroll_to_top = ->
+  $('html, body').animate
+    scrollTop:0
+    , 500
 
 # --------------------------------------------------------------------------------------------------------------------
 # public interface
