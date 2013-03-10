@@ -78,18 +78,6 @@ This is simple. Ajaxify automatically inserts a loader div with the class `ajaxi
 the content wrapper before starting an Ajax request. So just supply styles for `.ajaxify_loader` in your css, with an
 animated gif as a background.
 
-### Scrolling
-
-By default, ajaxify scrolls to the top of the screen when you click on a link or submit a form.
-You can change this default behavior by setting 'scroll_to_top' to false on init.
-
-    Ajaxify.init
-      scroll_to_top: false
-
-You can also change the setting for individual links by adding classes:
-
-    = link_to "Scroll to top", scroll_to_top_path, class: 'scroll_to_top'
-    = link_to "Don't scroll", no_scroll_path, class: 'no_scroll_to_top'
 
 ### Page Title
 
@@ -199,6 +187,20 @@ loaded via Ajaxify.
 ### Toggle Ajaxify
 
 You can temporarily deactivate Ajaxify by calling `Ajaxify.activate(false)`. You can switch it on again with `Ajaxify.activate()`.
+
+
+### Scrolling
+
+By default, ajaxify scrolls to the top of the screen when you click on a link or submit a form.
+You can change this default behavior by setting 'scroll_to_top' to false on init.
+
+    Ajaxify.init
+      scroll_to_top: false
+
+You can also change the setting for individual links by adding classes:
+
+    = link_to "Scroll to top", scroll_to_top_path, class: 'scroll_to_top'
+    = link_to "Don't scroll", no_scroll_path, class: 'no_scroll_to_top'
 
 
 ## Contributing
