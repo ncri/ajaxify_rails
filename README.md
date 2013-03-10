@@ -87,6 +87,7 @@ You can change this default behavior by setting 'scroll_to_top' to false on init
       scroll_to_top: false
 
 You can also change the setting for individual links by adding classes:
+
     = link_to "Scroll to top", scroll_to_top_path, class: 'scroll_to_top'
     = link_to "Don't scroll", no_scroll_path, class: 'no_scroll_to_top'
 
