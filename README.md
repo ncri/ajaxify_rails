@@ -80,15 +80,15 @@ animated gif as a background.
 
 ### Scrolling
 
-By default, ajaxify scrolls to the top of the screen when you click on a link.
-You can change this default behavior by setting 'scroll_on_click' to false on init.
+By default, ajaxify scrolls to the top of the screen when you click on a link or submit a form.
+You can change this default behavior by setting 'scroll_to_top' to false on init.
 
     Ajaxify.init
-      scroll_on_click: false
+      scroll_to_top: false
 
 You can also change the setting for individual links by adding classes:
     = link_to "Scroll to top", scroll_to_top_path, class: 'scroll_to_top'
-    = link_to "Don't scroll", no_scroll_path, class: 'no_scroll'
+    = link_to "Don't scroll", no_scroll_path, class: 'no_scroll_to_top'
 
 ### Page Title
 
