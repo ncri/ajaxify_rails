@@ -49,14 +49,18 @@ module ActionControllerAdditions
                                                        data: { page_title: page_title,
                                                                flashes: flashes.to_json } )
           response.body = response_body[0]
+          response.headers['Ajaxify-Assets-Digest'] = ajaxify_assets_digest
+          
           return
         end
         super
+
+        ajaxify_add_meta_tag( ajaxify_assets_digest_meta_tag ) if !request.xhr?
+
         # Correcting urls for non history api browsers wont work for post requests so add a meta tag to the response body to communicate this to
         # the ajaxify javascript
-        if request.post? and not request.xhr?
-          response.body = response_body[0].sub('<head>', "<head>\n    <meta name='ajaxify:dont_correct_url' content='true'>")
-        end
+        ajaxify_add_meta_tag( view_context.tag(:meta, name: 'ajaxify:dont_correct_url', content: 'true') ) if request.post? and not request.xhr?
+
         return
       end
 
@@ -91,6 +95,23 @@ module ActionControllerAdditions
             sub(/(&|\?)ajaxified=true/, '').
             sub(/(&|\?)ajaxify_redirect=true/, '')
       end
+
+      # Meta tag for asset change detection - inspired by wiselinks
+      #
+      def ajaxify_assets_digest_meta_tag
+        
+        view_context.tag(:meta, name: 'ajaxify:assets-digest', content: ajaxify_assets_digest)   
+      end
+
+      def ajaxify_assets_digest
+        digests = Rails.application.config.assets.digests
+        digests ? Digest::MD5.hexdigest(digests.values.join) : ''
+      end
+
+      def ajaxify_add_meta_tag meta_tag
+        response.body = response_body[0].sub('<head>', "<head>\n    #{meta_tag}") 
+      end
+
     end
 
   end

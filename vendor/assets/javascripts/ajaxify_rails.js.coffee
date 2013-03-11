@@ -178,10 +178,14 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   # Correct the url after a redirect and when it has the ajaxify param in it.
   # The latter can happen e.g. for pagination links that are auto generated.
+  original_request_type = options.type
   current_url = $('#ajaxify_content #ajaxify_location').html()
   if options.url != current_url
     options.url = current_url.replace(/(&|&amp;|\?)ajaxify_redirect=true/,'')
     options.type = 'GET'
+  
+  unless original_request_type and original_request_type.toLowerCase() == 'post'
+    reload_page_if_assets_stale options.url, jqXHR
 
   update_url options, pop_state
 
@@ -295,6 +299,12 @@ scroll_page_to_top = ->
   $('html, body').animate
     scrollTop:0
     , 500
+
+
+reload_page_if_assets_stale = (url, jqXHR) ->
+  digest_header = jqXHR.getResponseHeader('Ajaxify-Assets-Digest')
+  if digest_header and digest_header != $("meta[name='ajaxify:assets-digest']").attr('content')
+    document.location.href = url
 
 # --------------------------------------------------------------------------------------------------------------------
 # public interface
