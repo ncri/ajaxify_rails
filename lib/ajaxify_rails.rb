@@ -1,5 +1,6 @@
 require "ajaxify_rails/version"
 require "ajaxify_rails/action_controller_additions"
+require "ajaxify_rails/action_caching_patch"
 
 module AjaxifyRails
 

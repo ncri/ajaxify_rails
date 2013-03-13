@@ -14,6 +14,15 @@ module ActionControllerAdditions
       end
 
 
+      def ajaxify_add_meta_tags
+        ajaxify_add_meta_tag( ajaxify_assets_digest_meta_tag ) if !request.xhr?
+
+        # Correcting urls for non history api browsers wont work for post requests so add a meta tag to the response body to communicate this to
+        # the ajaxify javascript
+        ajaxify_add_meta_tag( view_context.tag(:meta, name: 'ajaxify:dont_correct_url', content: 'true') ) if request.post? and not request.xhr?
+      end
+
+
       private
 
       def ajaxified?
@@ -50,16 +59,13 @@ module ActionControllerAdditions
                                                                flashes: flashes.to_json } )
           response.body = response_body[0]
           response.headers['Ajaxify-Assets-Digest'] = ajaxify_assets_digest
-          
+
           return
         end
+
         super
 
-        ajaxify_add_meta_tag( ajaxify_assets_digest_meta_tag ) if !request.xhr?
-
-        # Correcting urls for non history api browsers wont work for post requests so add a meta tag to the response body to communicate this to
-        # the ajaxify javascript
-        ajaxify_add_meta_tag( view_context.tag(:meta, name: 'ajaxify:dont_correct_url', content: 'true') ) if request.post? and not request.xhr?
+        ajaxify_add_meta_tags  # doesn't work for action cached pages right now
 
         return
       end
@@ -99,8 +105,7 @@ module ActionControllerAdditions
       # Meta tag for asset change detection - inspired by wiselinks
       #
       def ajaxify_assets_digest_meta_tag
-        
-        view_context.tag(:meta, name: 'ajaxify:assets-digest', content: ajaxify_assets_digest)   
+        view_context.tag(:meta, name: 'ajaxify:assets-digest', content: ajaxify_assets_digest)
       end
 
       def ajaxify_assets_digest
@@ -109,10 +114,11 @@ module ActionControllerAdditions
       end
 
       def ajaxify_add_meta_tag meta_tag
-        response.body = response_body[0].sub('<head>', "<head>\n    #{meta_tag}") 
+        response.body = response_body[0].sub('<head>', "<head>\n    #{meta_tag}")
       end
 
     end
 
   end
+
 end

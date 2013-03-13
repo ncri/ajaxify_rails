@@ -183,7 +183,7 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
   if options.url != current_url
     options.url = current_url.replace(/(&|&amp;|\?)ajaxify_redirect=true/,'')
     options.type = 'GET'
-  
+
   unless original_request_type and original_request_type.toLowerCase() == 'post'
     reload_page_if_assets_stale options.url, jqXHR
 
@@ -286,7 +286,7 @@ protocol_with_host = ->
 
 
 push_state = ->
-  push_state_enabled and window.history.pushState 
+  push_state_enabled and window.history.pushState
 
 
 set_scroll_to_top = ($link_or_form) ->
