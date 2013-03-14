@@ -3,6 +3,8 @@ module ActionControllerAdditions
   def self.included(controller)
     controller.class_eval do
 
+      hide_action :page_title, :ajaxify_extra_content, :ajaxify_add_meta_tags, :ajaxify_set_asset_digest_header, :ajaxified?
+
       # override in your controller
       def page_title
         nil
@@ -15,20 +17,25 @@ module ActionControllerAdditions
 
 
       def ajaxify_add_meta_tags
-        ajaxify_add_meta_tag( ajaxify_assets_digest_meta_tag ) if !request.xhr?
+        ajaxify_add_meta_tag( ajaxify_assets_digest_meta_tag )
 
         # Correcting urls for non history api browsers wont work for post requests so add a meta tag to the response body to communicate this to
         # the ajaxify javascript
-        ajaxify_add_meta_tag( view_context.tag(:meta, name: 'ajaxify:dont_correct_url', content: 'true') ) if request.post? and not request.xhr?
+        ajaxify_add_meta_tag( view_context.tag(:meta, name: 'ajaxify:dont_correct_url', content: 'true') ) if request.post?
       end
 
 
-      private
+      def ajaxify_set_asset_digest_header
+        response.headers['Ajaxify-Assets-Digest'] = ajaxify_assets_digest
+      end
+
 
       def ajaxified?
         request.xhr? and params[:ajaxified]
       end
 
+
+      private
 
       def render *args, &block
         if ajaxified?
@@ -58,14 +65,14 @@ module ActionControllerAdditions
                                                        data: { page_title: page_title,
                                                                flashes: flashes.to_json } )
           response.body = response_body[0]
-          response.headers['Ajaxify-Assets-Digest'] = ajaxify_assets_digest
+          ajaxify_set_asset_digest_header
 
           return
         end
 
         super
 
-        ajaxify_add_meta_tags  # doesn't work for action cached pages right now
+        ajaxify_add_meta_tags unless request.xhr?
 
         return
       end
