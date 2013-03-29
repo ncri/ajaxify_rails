@@ -178,7 +178,7 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   title = ajaxify_content.data('page-title')
   flashes = ajaxify_content.data('flashes')
-  content_container = ajaxify_content('container') || content_container
+  content_container = ajaxify_content.data('container') || content_container
 
   $("##{content_container}").html response.html()
 
