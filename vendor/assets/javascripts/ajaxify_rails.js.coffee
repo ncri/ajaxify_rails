@@ -1,6 +1,6 @@
 
 active = true
-original_content_container = content_container = 'main'
+content_container = 'main'
 base_paths = null
 flash_types = ['notice']
 dont_correct_url = false
@@ -37,11 +37,9 @@ init = (options = {}) ->
   flash_types = options.flash_types if 'flash_types' of options
   push_state_enabled = options.push_state_enabled if 'push_state_enabled' of options
   active = options.active if 'active' of options
+  content_container = options.content_container if if 'content_container' of options
   correct_url() unless $('meta[name="ajaxify:dont_correct_url"]').length > 0
   scroll_to_top = options.scroll_to_top if 'scroll_to_top' of options
-
-  if 'content_container' of options
-    original_content_container = content_container = options.content_container
 
 
 ajaxify = ->
@@ -178,9 +176,9 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   title = ajaxify_content.data('page-title')
   flashes = ajaxify_content.data('flashes')
-  content_container = ajaxify_content.data('container') || content_container
+  container = ajaxify_content.data('container') || content_container
 
-  $("##{content_container}").html response.html()
+  $("##{container}").html response.html()
 
   # Correct the url after a redirect and when it has the ajaxify param in it.
   # The latter can happen e.g. for pagination links that are auto generated.
@@ -197,13 +195,12 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   $(document).trigger 'ajaxify:content_inserted'
 
-  $("##{content_container} #ajaxify_content").remove()
+  $("##{container} #ajaxify_content").remove()
 
   if title
     document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
 
   show_flashes(flashes)
-  content_container = original_content_container
 
   $(document).trigger('ajaxify:content_loaded', [data, status, jqXHR, options.url])
 
