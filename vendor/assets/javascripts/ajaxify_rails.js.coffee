@@ -1,4 +1,3 @@
-
 active = true
 content_container = 'main'
 base_paths = null
@@ -52,7 +51,7 @@ rails_ujs_fix = ->
     # has `no_ajaxify` class.
     form.addClass('no_ajaxify') if link.hasClass('no_ajaxify')
 
-    if csrf_param !== undefined && csrf_token !== undefined
+    if csrf_param != undefined && csrf_token != undefined
       metadata_input += '<input name="' + 
         csrf_param + '" value="' + 
         csrf_token + '" type="hidden" />'
