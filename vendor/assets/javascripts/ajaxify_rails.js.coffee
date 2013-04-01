@@ -32,6 +32,38 @@ get_content_container = ->
 set_content_container = (new_content_container) ->
   content_container = new_content_container
 
+
+# Override rails jquery_ujs on handling links with :data-method
+# Example:
+#   <%= link_to 'test', test_path, :method => :delete %>
+rails_ujs_fix = ->
+  return false if jQuery['rails'] == undefined
+  
+  jQuery.rails.handleMethod = (link) ->
+    href = $.rails.href(link)
+    method = link.data('method')
+    target = link.attr('target')
+    csrf_token = $('meta[name=csrf-token]').attr('content')
+    csrf_param = $('meta[name=csrf-param]').attr('content')
+    form = $("<form method='post' action='#{href}'></form>")
+    metadata_input = "<input name='_method' value='#{method}' type='hidden' />"
+
+    # Let's not use ajaxify in form submission if link
+    # has `no_ajaxify` class.
+    form.addClass('no_ajaxify') if link.hasClass('no_ajaxify')
+
+    if csrf_param !== undefined && csrf_token !== undefined
+      metadata_input += '<input name="' + 
+        csrf_param + '" value="' + 
+        csrf_token + '" type="hidden" />'
+
+    form.attr('target', target) if target
+
+    form.hide().append(metadata_input).appendTo('body')
+    form.submit()
+
+
+
 init = (options = {}) ->
   base_paths = options.base_paths if 'base_paths' of options
   flash_types = options.flash_types if 'flash_types' of options
@@ -40,6 +72,7 @@ init = (options = {}) ->
   content_container = options.content_container if 'content_container' of options
   correct_url() unless $('meta[name="ajaxify:dont_correct_url"]').length > 0
   scroll_to_top = options.scroll_to_top if 'scroll_to_top' of options
+  rails_ujs_fix()
 
 
 ajaxify = ->
