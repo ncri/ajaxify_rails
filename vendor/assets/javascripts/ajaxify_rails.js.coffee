@@ -1,4 +1,3 @@
-
 active = true
 content_container = 'main'
 base_paths = null
@@ -37,7 +36,7 @@ init = (options = {}) ->
   flash_types = options.flash_types if 'flash_types' of options
   push_state_enabled = options.push_state_enabled if 'push_state_enabled' of options
   active = options.active if 'active' of options
-  content_container = options.content_container if if 'content_container' of options
+  content_container = options.content_container if 'content_container' of options
   correct_url() unless $('meta[name="ajaxify:dont_correct_url"]').length > 0
   scroll_to_top = options.scroll_to_top if 'scroll_to_top' of options
 
