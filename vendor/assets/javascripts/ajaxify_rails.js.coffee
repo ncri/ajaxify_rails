@@ -36,7 +36,7 @@ set_content_container = (new_content_container) ->
 # Example:
 #   <%= link_to 'test', test_path, :method => :delete %>
 rails_ujs_fix = ->
-  return false if jQuery['rails'] == undefined
+  return false if 'rails' of jQuery
   
   jQuery.rails.handleMethod = (link) ->
     href = $.rails.href(link)
