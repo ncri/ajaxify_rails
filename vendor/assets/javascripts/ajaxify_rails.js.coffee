@@ -1,4 +1,3 @@
-
 active = true
 content_container = 'main'
 base_paths = null
@@ -68,6 +67,9 @@ ajaxify = ->
                             form[action='']#{exclude_selector}", ->
 
       $this = $(this)
+
+      # Rails is using a form with a _method hidden field to indicate a delete method.
+      return true if $this.find("input[name='_method'][value='delete'][type='hidden']:first").length != 0
 
       form_params = $(this).serialize()
       form_params += '&ajaxified=true'
@@ -171,10 +173,14 @@ update_url = (options, pop_state = false) ->
 
 on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
-  $("##{content_container}").html data
+  response = $("<div></div>").append(data)
+  ajaxify_content = response.find('#ajaxify_content')
 
-  title = $('#ajaxify_content').data('page-title')
-  flashes = $('#ajaxify_content').data('flashes')
+  title = ajaxify_content.data('page-title')
+  flashes = ajaxify_content.data('flashes')
+  container = ajaxify_content.data('container') || content_container
+
+  $("##{container}").html response.html()
 
   # Correct the url after a redirect and when it has the ajaxify param in it.
   # The latter can happen e.g. for pagination links that are auto generated.
@@ -191,7 +197,7 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
 
   $(document).trigger 'ajaxify:content_inserted'
 
-  $("##{content_container} #ajaxify_content").remove()
+  $("##{container} #ajaxify_content").remove()
 
   if title
     document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
