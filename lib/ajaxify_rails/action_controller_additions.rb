@@ -63,7 +63,8 @@ module ActionControllerAdditions
           response_body[0] += view_context.content_tag(:div, current_url_tag + extra_content,
                                                        id: 'ajaxify_content', style: 'display:none',
                                                        data: { page_title: page_title,
-                                                               flashes: flashes.to_json } )
+                                                               flashes: flashes.to_json,
+                                                               container: args[:ajaxify_container] } )
           response.body = response_body[0]
           ajaxify_set_asset_digest_header
 
