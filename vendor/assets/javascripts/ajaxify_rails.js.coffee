@@ -68,6 +68,9 @@ ajaxify = ->
 
       $this = $(this)
 
+      # Rails is using a form with a _method hidden field to indicate a delete method.
+      return true if $this.find("input[name='_method'][value='delete'][type='hidden']:first").length != 0
+
       form_params = $(this).serialize()
       form_params += '&ajaxified=true'
 
