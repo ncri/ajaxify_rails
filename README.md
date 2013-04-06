@@ -187,6 +187,10 @@ loaded via Ajaxify.
 ### Toggle Ajaxify
 
 You can temporarily deactivate Ajaxify by calling `Ajaxify.activate(false)`. You can switch it on again with `Ajaxify.activate()`.
+Note that `Ajaxify.activate` has to be called before the DOM is ready. Alternatively, you can set the `active` option to false when initializing Ajaxify to temporarily disable ajaxification, e.g.
+
+    Ajaxify.init
+      active: false
 
 
 ### Scrolling
