@@ -173,32 +173,33 @@ update_url = (options, pop_state = false) ->
 on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
   $("##{content_container}").html data
 
-  title = $('#ajaxify_content').data('page-title')
-  flashes = $('#ajaxify_content').data('flashes')
+  if $('#ajaxify_content').length > 0  # it can happen that #ajaxify_content is not present at this point, on ajaxify redirects for example
+    title = $('#ajaxify_content').data('page-title')
+    flashes = $('#ajaxify_content').data('flashes')
 
-  # Correct the url after a redirect and when it has the ajaxify param in it.
-  # The latter can happen e.g. for pagination links that are auto generated.
-  original_request_type = options.type
-  current_url = $('#ajaxify_content #ajaxify_location').html()
-  if options.url != current_url
-    options.url = current_url.replace(/(&|&amp;|\?)ajaxify_redirect=true/,'')
-    options.type = 'GET'
+    # Correct the url after a redirect and when it has the ajaxify param in it.
+    # The latter can happen e.g. for pagination links that are auto generated.
+    original_request_type = options.type
+    current_url = $('#ajaxify_content #ajaxify_location').html()
+    if options.url != current_url
+      options.url = current_url.replace(/(&|&amp;|\?)ajaxify_redirect=true/,'')
+      options.type = 'GET'
 
-  unless original_request_type and original_request_type.toLowerCase() == 'post'
-    reload_page_if_assets_stale options.url, jqXHR
+    unless original_request_type and original_request_type.toLowerCase() == 'post'
+      reload_page_if_assets_stale options.url, jqXHR
 
-  update_url options, pop_state
+    update_url options, pop_state
 
-  $(document).trigger 'ajaxify:content_inserted'
+    $(document).trigger 'ajaxify:content_inserted'
 
-  $("##{content_container} #ajaxify_content").remove()
+    $("##{content_container} #ajaxify_content").remove()
 
-  if title
-    document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
+    if title
+      document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
 
-  show_flashes(flashes)
+    show_flashes(flashes)
 
-  $(document).trigger('ajaxify:content_loaded', [data, status, jqXHR, options.url])
+    $(document).trigger('ajaxify:content_loaded', [data, status, jqXHR, options.url])
 
 
 correct_url = ->
