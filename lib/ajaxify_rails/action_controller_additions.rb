@@ -57,7 +57,7 @@ module ActionControllerAdditions
           # Store current path for redirect url changes. Also used to remove the ajaxify parameter that gets added to some auto generated urls
           # like e.g. pagination links see (ajaxify.js -> on_ajaxify_success())
           #
-          current_url_tag = view_context.content_tag(:span, remove_ajaxify_params(request.fullpath),
+          current_url_tag = view_context.content_tag(:span, remove_ajaxify_param(request.fullpath),
                                                      id: 'ajaxify_location')
 
           response_body[0] += view_context.content_tag(:div, current_url_tag + extra_content,
@@ -103,11 +103,9 @@ module ActionControllerAdditions
       end
 
 
-      def remove_ajaxify_params url
+      def remove_ajaxify_param url
         url.sub(/\?ajaxified=true&(.*)/, '?\1').
-            sub(/\?ajaxify_redirect=true&(.*)/, '?\1').
-            sub(/(&|\?)ajaxified=true/, '').
-            sub(/(&|\?)ajaxify_redirect=true/, '')
+            sub(/(&|\?)ajaxified=true/, '')
       end
 
       # Meta tag for asset change detection - inspired by wiselinks
