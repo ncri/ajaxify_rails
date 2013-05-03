@@ -87,7 +87,8 @@ ajaxify = ->
   # (history interface browsers only)
   $(window).on 'popstate', (e) ->
     e = e.originalEvent
-    if e.state and e.state.data and e.state.data.ajaxified
+    data = if e.state and e.state.data then url_params_as_object(e.state.data) else null
+    if data and data.ajaxified
       e.state.cache = false
       load e.state, true
 
@@ -276,6 +277,9 @@ base_path_regexp = ->
 is_string = (variable) ->
   Object.prototype.toString.call(variable) == '[object String]'
 
+url_params_as_object = (param_string_or_object) ->
+  return param_string_or_object unless is_string( param_string_or_object )
+  JSON.parse('{"' + decodeURI(param_string_or_object.replace(/&/g, "\",\"").replace(/\=/g,"\":\"")) + '"}')
 
 regexp_escape = (str) ->
   str.replace new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&'
