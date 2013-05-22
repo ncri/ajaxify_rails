@@ -35,8 +35,6 @@ module ActionControllerAdditions
       end
 
 
-      private
-
       def render *args, &block
         if ajaxified?
           args = _normalize_args(*args, &block)
