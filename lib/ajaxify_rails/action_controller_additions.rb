@@ -91,8 +91,10 @@ module ActionControllerAdditions
 
         super
 
-        ajaxify_params = "ajaxified=true&ajaxify_redirect=true"
-        self.location += "#{self.location =~ /\?/ ? '&' : '?'}#{ajaxify_params}" if request.xhr?  # to avoid the full layout from being rendered
+        if ajaxified?
+          ajaxify_params = "ajaxified=true&ajaxify_redirect=true"
+          self.location += "#{self.location =~ /\?/ ? '&' : '?'}#{ajaxify_params}" # avoid the full layout from being rendered
+        end
       end
 
 
