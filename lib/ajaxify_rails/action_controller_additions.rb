@@ -4,6 +4,7 @@ module ActionControllerAdditions
     controller.class_eval do
 
       hide_action :page_title, :ajaxify_extra_content, :ajaxify_add_meta_tags, :ajaxify_set_asset_digest_header, :ajaxified?
+      helper_method :remove_ajaxify_param
 
       # override in your controller
       def page_title
