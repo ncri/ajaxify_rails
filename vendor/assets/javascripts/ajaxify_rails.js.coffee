@@ -246,7 +246,7 @@ show_flashes = (flashes) ->
     if flashes and flashes[this]
       $("##{this}").html flashes[this]
       $("##{this}").show()
-      $(document).trigger 'ajaxify:flash_displayed', [this]
+      $(document).trigger 'ajaxify:flash_displayed', [this, flashes[this] ]
 
     else
       $("##{this}").hide()
