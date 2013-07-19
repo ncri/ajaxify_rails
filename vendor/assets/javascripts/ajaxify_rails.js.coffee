@@ -59,6 +59,7 @@ ajaxify = ->
         url: $this.attr('href')
         type: $this.data('method')
         confirm: $this.data('confirm')
+        element: $this
         scroll_to_top: set_scroll_to_top($this)
 
       false
@@ -80,6 +81,7 @@ ajaxify = ->
         data: form_params
         type: $this.attr('method')
         confirm: $this.data('confirm')
+        element: $this
         scroll_to_top: set_scroll_to_top($this)
 
       false
@@ -116,7 +118,10 @@ load = (options, pop_state = false) ->
       type = options.type or 'get'
 
     if options.confirm
-      return false unless confirm options.confirm
+      if $.rails != undefined
+        return false unless $.rails.confirm(options.confirm, options.element)
+      else
+        return false unless confirm(options.confirm)
 
     $(document).trigger 'ajaxify:before_load', [options, pop_state]
 
@@ -241,7 +246,7 @@ show_flashes = (flashes) ->
     if flashes and flashes[this]
       $("##{this}").html flashes[this]
       $("##{this}").show()
-      $(document).trigger 'ajaxify:flash_displayed', [this]
+      $(document).trigger 'ajaxify:flash_displayed', [this, flashes[this] ]
 
     else
       $("##{this}").hide()
