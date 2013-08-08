@@ -16,6 +16,10 @@ module ActionControllerAdditions
         ''
       end
 
+      def ajaxify_after_render_extra_content
+        ''
+      end
+
 
       def ajaxify_add_meta_tags
         ajaxify_add_meta_tag( ajaxify_assets_digest_meta_tag )
@@ -53,13 +57,16 @@ module ActionControllerAdditions
 
           super args
 
+          after_render_extra_content = ajaxify_after_render_extra_content
+
+
           # Store current path for redirect url changes. Also used to remove the ajaxify parameter that gets added to some auto generated urls
           # like e.g. pagination links see (ajaxify.js -> on_ajaxify_success())
           #
           current_url_tag = view_context.content_tag(:span, remove_ajaxify_param(request.fullpath),
                                                      id: 'ajaxify_location')
 
-          response_body[0] += view_context.content_tag(:div, current_url_tag + extra_content,
+          response_body[0] += view_context.content_tag(:div, current_url_tag + extra_content + after_render_extra_content,
                                                        id: 'ajaxify_content', style: 'display:none',
                                                        data: { page_title: page_title,
                                                                flashes: flashes.to_json,
