@@ -90,7 +90,7 @@ It's a common use case to have a navigation that needs to change its appearence 
 to a different section of the page. Ajaxify provides a success callback that is triggered after successful
 updates of the page's main content. Just bind to the `ajaxify:content_loaded' event and make your layout changes:
 
-    $('body').on 'ajaxify:content_loaded', ->
+    $(document).on 'ajaxify:content_loaded', ->
       # update navigation and/or other layout elements
 
 
@@ -158,7 +158,7 @@ For example you could provide html for a widget in the layout like this:
 
 And then, on the client side bind to the `ajaxify:content_inserted` event and select the widget html via `#ajaxify_content`:
 
-    $('body').on 'ajaxify:content_inserted', ->
+    $(document).on 'ajaxify:content_inserted', ->
       $('#my_fancy_widget').html $('#ajaxify_content #my_fancy_widget_html').html()
 
 Tip: you can call view helpers to render extra content from within your controller using the view_context:
