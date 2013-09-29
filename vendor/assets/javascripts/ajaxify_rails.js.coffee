@@ -4,6 +4,7 @@ base_paths = null
 flash_types = ['notice']
 dont_correct_url = false
 push_state_enabled = true
+loader_element = "<div class='ajaxify_loader'></div>"
 
 ignore_hash_change = null
 load_page_from_hash = null
@@ -30,6 +31,9 @@ get_content_container = ->
 
 set_content_container = (new_content_container) ->
   content_container = new_content_container
+
+set_loader_element = (new_loader_element) ->
+  loader_element = new_loader_element
 
 
 init = (options = {}) ->
@@ -132,7 +136,7 @@ load = (options, pop_state = false) ->
       type: type
       cache: true
       beforeSend: (xhr) ->
-        $("##{content_container}").html( "<div class='ajaxify_loader'></div>" )
+        $("##{content_container}").html( loader_element )
         options.scroll_to_top = scroll_to_top unless 'scroll_to_top' of options
         scroll_page_to_top() if options.scroll_to_top
 
@@ -323,7 +327,7 @@ reload_page_if_assets_stale = (url, jqXHR) ->
 #   <%= link_to 'test', test_path, :method => :delete %>
 rails_ujs_fix = ->
   return false unless 'rails' of jQuery
-  
+
   jQuery.rails.handleMethod = (link) ->
     href = $.rails.href(link)
     method = link.data('method')
@@ -338,8 +342,8 @@ rails_ujs_fix = ->
     form.addClass('no_ajaxify') if link.hasClass('no_ajaxify')
 
     if csrf_param != undefined && csrf_token != undefined
-      metadata_input += '<input name="' + 
-        csrf_param + '" value="' + 
+      metadata_input += '<input name="' +
+        csrf_param + '" value="' +
         csrf_token + '" type="hidden" />'
 
     form.attr('target', target) if target
@@ -351,7 +355,7 @@ rails_ujs_fix = ->
 # public interface
 # --------------------------------------------------------------------------------------------------------------------
 
-@Ajaxify = { init, ajaxify, load, update_url, activate, set_content_container, get_content_container }
+@Ajaxify = { init, ajaxify, load, update_url, activate, set_content_container, get_content_container, set_loader_element }
 
 
 # --------------------------------------------------------------------------------------------------------------------
