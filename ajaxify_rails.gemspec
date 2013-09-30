@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.name          = "ajaxify_rails"
   gem.require_paths = ["lib"]
   gem.version       = AjaxifyRails::VERSION
+  gem.license       = 'MIT'
 
   gem.add_dependency 'rails', '>= 3.1.0'
 
