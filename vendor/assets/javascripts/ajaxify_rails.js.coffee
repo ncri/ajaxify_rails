@@ -317,7 +317,8 @@ scroll_page_to_top = ->
 
 reload_page_if_assets_stale = (url, jqXHR) ->
   digest_header = jqXHR.getResponseHeader('Ajaxify-Assets-Digest')
-  if digest_header and digest_header != $("meta[name='ajaxify:assets-digest']").attr('content')
+  meta_asset_digest = $("meta[name='ajaxify:assets-digest']").attr('content')
+  if digest_header and meta_asset_digest != '' and digest_header != meta_asset_digest
     document.location.href = url
 
 
