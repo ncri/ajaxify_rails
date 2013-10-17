@@ -191,8 +191,9 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
     # The latter can happen e.g. for pagination links that are auto generated.
     original_request_type = options.type
     current_url = $('#ajaxify_content #ajaxify_location').html()
+    current_url = current_url.replace(/&amp;/g, '&')
     if options.url != current_url
-      options.url = current_url.replace(/(&|&amp;|\?)ajaxify_redirect=true/,'')
+      options.url = current_url.replace(/(&|\?)ajaxify_redirect=true/,'')
       options.type = 'GET'
 
     unless original_request_type and original_request_type.toLowerCase() == 'post'
@@ -205,7 +206,7 @@ on_ajaxify_success = (data, status, jqXHR, pop_state, options) ->
     $("##{content_container} #ajaxify_content").remove()
 
     if title
-      document.title = title.replace /&amp;/, '&'   # Todo: need to figure out what else needs to be unescaped
+      document.title = title.replace /&amp;/g, '&'   # Todo: need to figure out what else needs to be unescaped
 
     show_flashes(flashes)
 
@@ -356,7 +357,7 @@ rails_ujs_fix = ->
 # public interface
 # --------------------------------------------------------------------------------------------------------------------
 
-@Ajaxify = { init, ajaxify, load, update_url, activate, set_content_container, get_content_container, set_loader_element }
+@Ajaxify = { init, ajaxify, load, update_url, activate, set_content_container, get_content_container, set_loader_element, base_path_regexp }
 
 
 # --------------------------------------------------------------------------------------------------------------------
