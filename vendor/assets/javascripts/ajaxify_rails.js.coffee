@@ -261,7 +261,7 @@ show_flashes = (flashes) ->
 on_hash_change = ->
   url = window.location.hash.replace(/#/, "")
 
-  if match = window.location.pathname.match(base_path_regexp())
+  if base_paths and base_paths.length > 0 and match = window.location.pathname.match(base_path_regexp())
     url = match[0] + url
 
   url = '/' if url == ''
