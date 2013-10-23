@@ -95,7 +95,9 @@ module ActionControllerAdditions
 
 
       def redirect_to(options = {}, response_status = {})
-        request.referer.sub!('#/', '/') if request.referer  # make redirect to back work for browsers without history api
+        if request.referer  # make redirect to back work for browsers without history api
+          request.referer.sub!('/#/', '/').sub!('#/', '/')
+        end
 
         super
 
