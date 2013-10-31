@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'jquery-rails'
   gem.add_development_dependency 'rspec-rails', '2.9.0'
   gem.add_development_dependency 'rspec-steps', '0.0.8'
-  gem.add_development_dependency 'capybara'
+  gem.add_development_dependency 'capybara', '2.0.2'
   gem.add_development_dependency 'selenium-webdriver', '>= 2.32.1'
   gem.add_development_dependency 'sqlite3'
   gem.add_development_dependency 'haml', '>= 3.1.5'
