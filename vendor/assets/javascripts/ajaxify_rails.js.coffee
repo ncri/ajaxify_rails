@@ -143,6 +143,9 @@ load = (options, pop_state = false) ->
       success: (data, status, jqXHR) ->
         on_ajaxify_success data, status, jqXHR, pop_state, options
 
+      error: (data, status, jqXHR) ->
+        $(document).trigger('ajaxify:load_error', [data, status, jqXHR, options.url])
+
 
 # --------------------------------------------------------------------------------------------------------------------
 # private methods

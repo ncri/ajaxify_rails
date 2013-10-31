@@ -1,13 +1,13 @@
 # Ajaxify Rails [![Build Status](https://secure.travis-ci.org/ncri/ajaxify_rails.png)](http://travis-ci.org/ncri/ajaxify_rails)
 
-No more full page reloads for your Rails app! Yay! 
+No more full page reloads for your Rails app! Yay!
 
 Automatically makes your app loading content in the background via Ajax.
 
-Works by turning all internal links into Ajax links that trigger an update of the page's content area. 
+Works by turning all internal links into Ajax links that trigger an update of the page's content area.
 Also form submissions are automatically turned into Ajax requests.
 
-Features: 
+Features:
 
 - Uses the html5 history interface for changing the url and making the browser's back and forward buttons work with Ajax.
 - Falls back to a hash based URL approach for browsers without the history interface (like Internet Explorer version <10).
@@ -47,7 +47,7 @@ In your application.js file add:
 
 Call `Ajaxify.init()` in your layout's javascript.
 Do this as early as possible to ensure Ajaxify's interchangeable url schemes (history api vs. hash based urls)
-work most effectively. 
+work most effectively.
 
 The later you call `init()`, the later potential redirects from one scheme to another are performed,
 which means the more unnecessary work the browser has to do.
@@ -63,14 +63,14 @@ If yield doesn't have a wrapper in your app yet, you need to supply one to get a
 
 You can set the content container of your app when initializing Ajaxify:
 
-    Ajaxify.init 
+    Ajaxify.init
       content_container: 'content_container_id'
 
 or later using `set_content_container`:
 
     Ajaxify.set_content_container('content_container_id')
-    
-    
+
+
 ### Loader Animation
 
 You probably like to have a loader image to be displayed to the user while content loads via Ajax.
@@ -100,14 +100,14 @@ Ajaxify correctly displays your flash messages after ajaxified requests.
 By default, only `flash[:notice]` is supported. If you are using for example `flash[:warning]` as well you have to add the flash_types
 option to the `Ajaxify.init()` call:
 
-    Ajaxify.init 
+    Ajaxify.init
       flash_types: ['notice', 'warning']
-    
+
 Also make sure that you supply invisible wrapper tags in your layout for each flash type you use, with the id set to the type, e.g.:
 
     #notice{ style: "#{'display:none' unless flash[:notice]}" }
-      = flash[:notice] 
-    
+      = flash[:notice]
+
 ### Full Page Reloads
 
 Sometimes requests change the layout of the page so significantly that loading only the main content via Ajax
@@ -122,7 +122,7 @@ For these cases you can turn off Ajaxify, by simply adding the class `no_ajaxify
 
 ### Root Redirects
 
-Sometimes you need to redirect on the root url. 
+Sometimes you need to redirect on the root url.
 
 For example you might have a localized application with the locale inside the url.
 When a user navigates to `your_domain.com` he/she gets redirected to e.g. `your_domain.com/en/`. This works fine in browsers supporting
@@ -175,6 +175,7 @@ Ajaxify provides a few jQuery events you can bind to:
 * `ajaxify:content_loaded` => Triggered after an ajaxify request finished successfully. Params: `data, status, jqXHR, url`.
 * `ajaxify:content_inserted` => Triggered after an ajaxify request finished but before extra content is stripped from the response.
 * `ajaxify:flash_displayed` => Triggered after a flash message is displayed. Parameters: `flash_type`.
+* `ajaxify:load_error` => Triggered if the ajaxify request goes wrong. Parameters: `data, status, jqXHR, url`.
 
 
 ### Javascript
