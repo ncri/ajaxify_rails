@@ -125,7 +125,7 @@ module ActionControllerAdditions
       end
 
       def ajaxify_assets_digest
-        digests = Rails.application.config.assets.digests
+        digests = Rails.application.config.assets.digest
         digests ? Digest::MD5.hexdigest(digests.values.join) : ''
       end
 
