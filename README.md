@@ -207,6 +207,18 @@ You can also change the setting for individual links by adding classes:
     = link_to "Scroll to top", scroll_to_top_path, class: 'scroll_to_top'
     = link_to "Don't scroll", no_scroll_path, class: 'no_scroll_to_top'
 
+### Loader animation
+
+By default, ajaxify displays a loader animation when you click on a link or submit a form.
+You can change this default behavior by setting 'display_loader' to false on init.
+
+    Ajaxify.init
+      display_loader: false
+
+You can also change the setting for individual links by adding classes:
+
+    = link_to "Display loader", display_loader_path, class: 'display_loader'
+    = link_to "Don't display loader", no_display_loader_path, class: 'no_display_loader'
 
 ## Contributing
 
