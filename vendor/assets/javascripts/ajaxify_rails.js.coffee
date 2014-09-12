@@ -10,6 +10,7 @@ ignore_hash_change = null
 load_page_from_hash = null
 
 scroll_to_top = true
+display_loader = true
 
 initial_history_state =
   url: window.location.href
@@ -44,6 +45,7 @@ init = (options = {}) ->
   content_container = options.content_container if 'content_container' of options
   correct_url() unless $('meta[name="ajaxify:dont_correct_url"]').length > 0
   scroll_to_top = options.scroll_to_top if 'scroll_to_top' of options
+  display_loader = options.display_loader if 'display_loader' of options
   rails_ujs_fix()
 
 
@@ -65,6 +67,7 @@ ajaxify = ->
         confirm: $this.data('confirm')
         element: $this
         scroll_to_top: set_scroll_to_top($this)
+        display_loader: set_display_loader($this)
 
       false
 
@@ -87,6 +90,7 @@ ajaxify = ->
         confirm: $this.data('confirm')
         element: $this
         scroll_to_top: set_scroll_to_top($this)
+        display_loader: set_display_loader($this)
 
       false
 
@@ -107,6 +111,7 @@ ajaxify = ->
 
 
 load = (options, pop_state = false) ->
+
 
   unless load_page_from_hash
 
@@ -136,7 +141,8 @@ load = (options, pop_state = false) ->
       type: type
       cache: true
       beforeSend: (xhr) ->
-        $("##{content_container}").html( loader_element )
+        options.display_loader = display_loader unless 'display_loader' of options
+        $("##{content_container}").html( loader_element ) if options.display_loader
         options.scroll_to_top = scroll_to_top unless 'scroll_to_top' of options
         scroll_page_to_top() if options.scroll_to_top
 
@@ -311,6 +317,11 @@ set_scroll_to_top = ($link_or_form) ->
   scroll = $link_or_form.hasClass('scroll_to_top')
   no_scroll = $link_or_form.hasClass('no_scroll_to_top')
   if scroll or no_scroll then return (scroll and !no_scroll) else return scroll_to_top
+
+set_display_loader = ($link_or_form) ->
+  display = $link_or_form.hasClass('display_loader')
+  no_display = $link_or_form.hasClass('no_display_loader')
+  if display or no_display then return (display and !no_display) else return display_loader
 
 
 scroll_page_to_top = ->
