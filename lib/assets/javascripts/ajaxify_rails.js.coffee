@@ -112,7 +112,6 @@ ajaxify = ->
 
 load = (options, pop_state = false) ->
 
-
   unless load_page_from_hash
 
     data = options.data || { ajaxified: true }
