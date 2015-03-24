@@ -19,8 +19,6 @@ Demo: http://ajaxify-demo.herokuapp.com/ (the first page load might take a while
 
 Demo source: https://github.com/ncri/ajaxify_rails_demo_app
 
-Blog Post: http://rubyandrails.posterous.com/introducing-the-ajaxify-rails-gem
-
 Inspired by the pjax_rails gem (https://github.com/rails/pjax_rails).
 
 ## Requirements
